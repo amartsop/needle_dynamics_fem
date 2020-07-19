@@ -37,12 +37,12 @@ armadillo
 -
 vector
 -
-dynamics_math.h
-.././include/dynamics_math.h
 state.h
 .././include/state.h
 needle_properties.hpp
 .././include/needle_properties.hpp
+dynamics_math.h
+.././include/dynamics_math.h
 beam_element.h
 .././include/beam_element.h
 
@@ -119,8 +119,6 @@ euler_rotations.h
 .././include/euler_rotations.h
 gnuplot-iostream.h
 .././include/gnuplot-iostream.h
-flexible_beam_fem.h
-.././include/flexible_beam_fem.h
 
 .././include/needle_properties.hpp
 
@@ -131,10 +129,8 @@ vector
 -
 armadillo
 -
-system_fem.h
-.././include/system_fem.h
 
-.././include/post_processing.hpp
+.././include/post_processing_fem.hpp
 iostream
 -
 armadillo
@@ -143,8 +139,6 @@ vector
 -
 euler_rotations.h
 .././include/euler_rotations.h
-flexible_beam_fem.h
-.././include/flexible_beam_fem.h
 gnuplot-iostream.h
 .././include/gnuplot-iostream.h
 dynamics_math.h
@@ -251,8 +245,8 @@ system_fem.h
 /home/thanos/Desktop/PhDDevelopment/MastersDissertation/FEM/needle_dynamics/system_fem.h
 numerical_integration.hpp
 /home/thanos/Desktop/PhDDevelopment/MastersDissertation/FEM/needle_dynamics/numerical_integration.hpp
-post_processing.hpp
-/home/thanos/Desktop/PhDDevelopment/MastersDissertation/FEM/needle_dynamics/post_processing.hpp
+post_processing_fem.hpp
+/home/thanos/Desktop/PhDDevelopment/MastersDissertation/FEM/needle_dynamics/post_processing_fem.hpp
 needle_animation.hpp
 /home/thanos/Desktop/PhDDevelopment/MastersDissertation/FEM/needle_dynamics/needle_animation.hpp
 

@@ -6,9 +6,9 @@
 #include <armadillo>
 #include <vector>
 
-#include "dynamics_math.h"
 #include "state.h"
 #include "needle_properties.hpp"
+#include "dynamics_math.h"
 #include "beam_element.h"
 
 class FlexibleBeamFem : public NeedleProperties
@@ -21,7 +21,7 @@ public:
     uint get_elements_number(void) {return m_elements; }
 
     // Mass matrix getter
-    arma::dmat get_mass_matrix(void){ return m_mass; }
+    arma::dmat get_mass_matrix(void){ return m_mass; }    arma::dmat mass_matrix_calculation(); 
     
     // Stiffness matrix getter
     arma::dmat get_stiffness_matrix(void){ return m_stiffness; }
@@ -34,6 +34,10 @@ public:
 
     // Update flexible body matrices and coriolis vector
     void update(double t, arma::dvec q, arma::dvec q_dot);
+
+    // Get element deflection
+       arma::dvec get_element_deflection(double ksi, arma::dvec ej,
+        uint element_id);
 
 private:
     // Number of elements

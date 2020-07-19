@@ -6,14 +6,13 @@
 
 #include "euler_rotations.h"
 #include "gnuplot-iostream.h"
-#include "flexible_beam_fem.h"
 
-
+template <class T, class M>
 class NeedleAnimation 
 {
 
 public:
-    NeedleAnimation(FlexibleBeamFem *needle, PostProcessing *post_processing);
+    NeedleAnimation(T *needle, M *post_processing);
 
     void animate(arma::dvec roa_g_g, arma::dvec euler_angles, 
         arma::dvec elastic_coordinates);
@@ -24,10 +23,10 @@ private:
     Gnuplot m_gp;
     
     // Needle handle
-    FlexibleBeamFem *m_needle;
+    T *m_needle;
 
     // // Post Processing handle 
-    PostProcessing *m_post_processing;
+    M *m_post_processing;
     
     // Create handle geometry
     void create_handle(arma::dvec center, arma::dvec orientation);
@@ -37,7 +36,8 @@ private:
 };
 
 
-NeedleAnimation::NeedleAnimation(FlexibleBeamFem *needle, PostProcessing *post_processing)
+template <class T, class M>
+NeedleAnimation<T, M>::NeedleAnimation(T *needle, M *post_processing)
 {
     m_gp << "set style line 1 lc rgb 'black' lw 1.5\n";
     m_gp << "set xrange [-0.4:0.4]\nset yrange [-0.4:0.4]\nset zrange [-0.4:0.4]\n";
@@ -53,7 +53,8 @@ NeedleAnimation::NeedleAnimation(FlexibleBeamFem *needle, PostProcessing *post_p
     m_post_processing = post_processing;
 }
 
-void NeedleAnimation::animate(arma::dvec roa_g_g, arma::dvec euler_angles, 
+template <class T, class M>
+void NeedleAnimation<T, M>::animate(arma::dvec roa_g_g, arma::dvec euler_angles, 
         arma::dvec elastic_coordinates)
 {
     // Caclulate the center of the rigid body
@@ -72,7 +73,8 @@ void NeedleAnimation::animate(arma::dvec roa_g_g, arma::dvec euler_angles,
     m_gp.send1d(beam_points_inertial);
 }
 
-void NeedleAnimation::create_handle(arma::dvec roa_f_f, arma::dvec euler_angles)
+template <class T, class M>
+void NeedleAnimation<T, M>::create_handle(arma::dvec roa_f_f, arma::dvec euler_angles)
 {
     auto cylinder_pol = cylinder(roa_f_f, euler_angles);
     auto str_polygons = polygons_to_strings(cylinder_pol);
@@ -106,7 +108,9 @@ void NeedleAnimation::create_handle(arma::dvec roa_f_f, arma::dvec euler_angles)
     }
 }
 
-std::vector<arma::dmat> NeedleAnimation::cylinder(arma::dvec center, arma::dvec orientation)
+template <class T, class M>
+std::vector<arma::dmat> NeedleAnimation<T, M>::cylinder(arma::dvec center,
+    arma::dvec orientation)
 { 
     
     // Polygons vector
@@ -189,7 +193,9 @@ std::vector<arma::dmat> NeedleAnimation::cylinder(arma::dvec center, arma::dvec 
 }
 
 
-std::vector<std::vector<std::string>> NeedleAnimation::polygons_to_strings(std::vector<arma::dmat> polygons)
+template <class T, class M>
+std::vector<std::vector<std::string>> NeedleAnimation<T, M>::polygons_to_strings(
+    std::vector<arma::dmat> polygons)
 {
     std::vector<std::vector<std::string>> str_polygons;
 

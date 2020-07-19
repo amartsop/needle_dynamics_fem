@@ -10,14 +10,14 @@
 #include "system_fem.h"
 
 #include "numerical_integration.hpp"
-#include "post_processing.hpp"
+#include "post_processing_fem.hpp"
 #include "needle_animation.hpp"
 
 
 int main(int argc, char *argv[])
 {
     // Number of elements 
-    uint ne = 2;
+    uint ne = 3;
 
     // Dofs per element 
     uint element_dofs = 10;
@@ -61,7 +61,7 @@ int main(int argc, char *argv[])
     NumericalIntegration ni(&system, h, 4);
 
     // Post processing 
-    PostProcessing post_processing(&needle);
+    PostProcessingFem post_processing_fem(&needle);
 
     // Iteration counter 
     uint counter = 0;
@@ -107,7 +107,7 @@ int main(int argc, char *argv[])
     gp.send1d(t_fz);
 
     // Animation
-    NeedleAnimation needle_animation(&needle, &post_processing);
+    NeedleAnimation needle_animation(&needle, &post_processing_fem);
     double animation_fs = 1e2; // Animation frequency
     int steps = fs / animation_fs;
 
@@ -135,6 +135,4 @@ int main(int argc, char *argv[])
         // Animation
         needle_animation.animate(roa_g_g, euler_angles, qf);
     }
-
-
 }

@@ -4,14 +4,12 @@
 #include <vector>
 #include <armadillo>
 
-#include "system_fem.h"
 
-
+template <class T>
 class NumericalIntegration
 {
 public:
-    NumericalIntegration(SystemFem *model, double integration_step, 
-        uint type);
+    NumericalIntegration(T *model, double integration_step, uint type);
 
     arma::dvec solve(arma::dvec state, double t);
 
@@ -28,8 +26,8 @@ private:
     arma::dvec predictor_corrector_4(arma::dvec state, double t);
 
     
-    // Linear model handle
-    SystemFem  *m_model;
+    // Model handle
+    T *m_model;
 
     // Integration step 
     double m_integration_step;
@@ -45,12 +43,12 @@ private:
 
     // Previous evaluation holder 
     arma::dvec m_previous_evaluations[10];
-    
 };
 
 
-NumericalIntegration::NumericalIntegration(SystemFem *model, 
-    double integration_step, uint type)
+template <class T>
+NumericalIntegration<T>::NumericalIntegration(T *model, double integration_step,
+    uint type)
 {
     // Integration type 
     m_type = type;
@@ -69,9 +67,10 @@ NumericalIntegration::NumericalIntegration(SystemFem *model,
     m_iterations = 0;
 }
 
-arma::dvec NumericalIntegration::solve(arma::dvec state, double t)
-{
 
+template <class T>
+arma::dvec NumericalIntegration<T>::solve(arma::dvec state, double t)
+{
     switch (m_type)
     {
         case 2:
@@ -108,7 +107,9 @@ arma::dvec NumericalIntegration::solve(arma::dvec state, double t)
 
 
 //************************* Predictor-Corrector ****************************//
-arma::dvec NumericalIntegration::predictor_corrector_2(arma::dvec state, double t)
+template <class T>
+arma::dvec NumericalIntegration<T>::predictor_corrector_2(arma::dvec state,
+    double t)
 {
     // Predictor
     arma::dvec x_predict = adams_bashforth_2(state, t);
@@ -122,7 +123,9 @@ arma::dvec NumericalIntegration::predictor_corrector_2(arma::dvec state, double 
     return (state + (m_integration_step / 2.0) * (f_current + f_predicted));
 }
  
-arma::dvec NumericalIntegration::predictor_corrector_4(arma::dvec state, double t)
+template <class T>
+arma::dvec NumericalIntegration<T>::predictor_corrector_4(arma::dvec state,
+    double t)
 {
     arma::dvec x_predict = adams_bashforth_4(state, t);
     double t_predict = t + m_integration_step;
@@ -150,7 +153,8 @@ arma::dvec NumericalIntegration::predictor_corrector_4(arma::dvec state, double 
 }
 
 //************************* Adams-Bushforth Methods ****************************//
-arma::dvec NumericalIntegration::adams_bashforth_2(arma::dvec state, double t)
+template <class T>
+arma::dvec NumericalIntegration<T>::adams_bashforth_2(arma::dvec state, double t)
 {
 
     if (m_iterations == 0)
@@ -170,8 +174,8 @@ arma::dvec NumericalIntegration::adams_bashforth_2(arma::dvec state, double t)
     }
 }
 
-
-arma::dvec NumericalIntegration::adams_bashforth_4(arma::dvec state, double t)
+template <class T>
+arma::dvec NumericalIntegration<T>::adams_bashforth_4(arma::dvec state, double t)
 {
     if (m_iterations < 3)
     {
@@ -180,7 +184,6 @@ arma::dvec NumericalIntegration::adams_bashforth_4(arma::dvec state, double t)
         // Calculation of state 1
         return runge_kutta_4(state, t);
     }
-
     else
     {
         arma::dvec f_prev_3 = m_previous_evaluations[0];
@@ -198,7 +201,8 @@ arma::dvec NumericalIntegration::adams_bashforth_4(arma::dvec state, double t)
 }
 
 //************************* Runge-Kutta Methods ****************************//
-arma::dvec NumericalIntegration::runge_kutta_2(arma::dvec state, double t)
+template <class T>
+arma::dvec NumericalIntegration<T>::runge_kutta_2(arma::dvec state, double t)
 {   
     double a = 2.0 / 3.0;
     double r = 1.0 / (2.0 * a);
@@ -210,8 +214,8 @@ arma::dvec NumericalIntegration::runge_kutta_2(arma::dvec state, double t)
     return state + (m_integration_step) * ( (1.0 - r) * k1 + r * k2 );
 }
 
-
-arma::dvec NumericalIntegration::runge_kutta_4(arma::dvec state, double t)
+template <class T>
+arma::dvec NumericalIntegration<T>::runge_kutta_4(arma::dvec state, double t)
 {   
     arma::dvec k1 = m_model->calculate(state, t);
 
@@ -228,8 +232,8 @@ arma::dvec NumericalIntegration::runge_kutta_4(arma::dvec state, double t)
         2.0 * k3 + k4);
 }
 
-
-arma::dvec NumericalIntegration::runge_kutta_5(arma::dvec state, double t)
+template <class T>
+arma::dvec NumericalIntegration<T>::runge_kutta_5(arma::dvec state, double t)
 {   
     arma::dvec k1 = m_model->calculate(state, t);
 

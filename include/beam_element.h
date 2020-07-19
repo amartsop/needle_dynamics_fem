@@ -37,6 +37,9 @@ public:
     void update(arma::dvec q, arma::dvec q_dot, arma::dvec fbj_f, 
         arma::dvec tsj_f);
 
+    // Get element's deflection
+    arma::dvec get_deflection(double ksi, arma::dvec ej);
+
 private:
     // Element id
     uint m_element_id;

@@ -417,3 +417,9 @@ arma::dmat BeamElement::shape_function(double ksi)
     return arma::join_vert(phi_u * m_luj_mat, phi_v * m_lvj_mat,
         phi_w * m_lwj_mat);
 }
+
+
+arma::dvec BeamElement::get_deflection(double ksi, arma::dvec ej)
+{
+    return shape_function(ksi) * ej;
+}

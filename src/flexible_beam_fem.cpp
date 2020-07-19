@@ -130,3 +130,10 @@ arma::dvec FlexibleBeamFem::external_traction(double time, arma::dvec q,
 {
     return {0.0, 0.0, 0.0};
 }
+
+
+arma::dvec FlexibleBeamFem::get_element_deflection(double ksi, arma::dvec ej,
+    uint element_id)
+ {
+    return m_beam_element.at(element_id - 1)->get_deflection(ksi, ej);
+}

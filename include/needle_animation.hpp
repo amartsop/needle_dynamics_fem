@@ -45,6 +45,8 @@ NeedleAnimation<T, M>::NeedleAnimation(T *needle, M *post_processing)
     m_gp << "set xlabel 'x'\nset ylabel 'y'\nset zlabel 'z'\n";
     m_gp << "set view 90, 0, 1, 1\n";
     m_gp << "set xyplane at 0\n";
+    // m_gp << "set terminal gif animate delay 4\n";
+    // m_gp << "set output 'test.gif'\n";
 
     // Needle handle
     m_needle = needle;

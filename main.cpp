@@ -17,7 +17,7 @@
 int main(int argc, char *argv[])
 {
     // Number of elements 
-    uint ne = 3;
+    uint ne = 1;
 
     // Dofs per element 
     uint element_dofs = 10;
@@ -49,7 +49,7 @@ int main(int argc, char *argv[])
 
     // Timing
     double t_final = 10.0; // Final time (s)
-    double fs = 5e3;  // Simulation frequency (Hz)
+    double fs = 1e4;  // Simulation frequency (Hz)
     double h = 1.0 / fs; // Integration time step (s)
     double t = 0; // Initial time (s) 
     
@@ -92,19 +92,19 @@ int main(int argc, char *argv[])
         std::cout << t << std::endl;
     }
 
-    // Plot reaction forces 
-    Gnuplot gp;
-    arma::dvec t_vec(time_vector);
-    arma::dvec fx_vec(fx);
-    arma::dvec fy_vec(fy);
-    arma::dvec fz_vec(fz);
+    // // Plot reaction forces 
+    // Gnuplot gp;
+    // arma::dvec t_vec(time_vector);
+    // arma::dvec fx_vec(fx);
+    // arma::dvec fy_vec(fy);
+    // arma::dvec fz_vec(fz);
 
-    arma::dmat t_fx = arma::join_horiz(t_vec.rows(0, t_vec.n_rows - 2), fx_vec);
-    arma::dmat t_fy = arma::join_horiz(t_vec.rows(0, t_vec.n_rows - 2), fy_vec);
-    arma::dmat t_fz = arma::join_horiz(t_vec.rows(0, t_vec.n_rows - 2), fz_vec);
+    // arma::dmat t_fx = arma::join_horiz(t_vec.rows(0, t_vec.n_rows - 2), fx_vec);
+    // arma::dmat t_fy = arma::join_horiz(t_vec.rows(0, t_vec.n_rows - 2), fy_vec);
+    // arma::dmat t_fz = arma::join_horiz(t_vec.rows(0, t_vec.n_rows - 2), fz_vec);
 
-    gp << "plot '-' with lines \n";
-    gp.send1d(t_fz);
+    // gp << "plot '-' with lines \n";
+    // gp.send1d(t_fz);
 
     // Animation
     NeedleAnimation needle_animation(&needle, &post_processing_fem);

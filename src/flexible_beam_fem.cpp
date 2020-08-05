@@ -110,11 +110,12 @@ arma::dvec FlexibleBeamFem::external_force(double time, arma::dvec q,
     if (element_id == m_elements)
     {
         fx = 0.0 * time;
-        fz = 0.0 * time;
-        fy = 0.0 * time;
-        if (fz >= 0.5) { fz = 0.0; }
-        if (fy >= 0.5) { fy =  0.0; }
+        fy = 0.5 * time;
+        fz = 0.5 * time;
+
         if (fx >= 0.0) { fx =  0.0; }
+        if (fy >= 0.5) { fy =  0.0; }
+        if (fz >= 0.5) { fz = 0.0; }
 
     }
     else

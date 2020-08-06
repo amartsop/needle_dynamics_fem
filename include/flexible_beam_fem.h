@@ -21,7 +21,7 @@ public:
     uint get_elements_number(void) {return m_elements; }
 
     // Mass matrix getter
-    arma::dmat get_mass_matrix(void){ return m_mass; }    arma::dmat mass_matrix_calculation(); 
+    arma::dmat get_mass_matrix(void){ return m_mass; }
     
     // Stiffness matrix getter
     arma::dmat get_stiffness_matrix(void){ return m_stiffness; }
@@ -35,13 +35,22 @@ public:
     // Update flexible body matrices and coriolis vector
     void update(double t, arma::dvec q, arma::dvec q_dot);
 
+    // Get total dofs number 
+    uint get_total_dofs(void) { return m_dofs; }
+
     // Get element deflection
-       arma::dvec get_element_deflection(double ksi, arma::dvec ej,
+       arma::dvec get_element_deflection(double xj, arma::dvec elastic_coordinates,
         uint element_id);
 
 private:
     // Number of elements
     uint m_elements;
+
+    // Number of rigid dofs
+    const uint m_rigid_dofs = 6;
+
+    // Number of elastic dofs
+    uint m_elastic_dofs;
 
     // Number of dofs
     uint m_dofs;
@@ -74,15 +83,16 @@ private:
     // Flexible body external force vector
     arma::dvec m_qfj;
 
-private:
-    // Mass matrix of flexible body calculation 
-    arma::dmat mass_matrix_calculation(arma::dvec q, arma::dvec q_dot); 
+// private:
+//     // Mass matrix of flexible body calculation 
+//     arma::dmat mass_matrix_calculation(arma::dvec q, arma::dvec q_dot); 
 
     // External force per element (bj) body frame
     arma::dvec external_force(double t, arma::dvec q, arma::dvec q_dot, uint 
         element_id);
 
-    // External traction per element body frame
-    arma::dvec external_traction(double t, arma::dvec q, arma::dvec q_dot, uint 
-        element_id);
+    // Distributed load body frame pj(t, x, q , q_dot) (element j)
+    arma::dvec distributed_load(double t, double xj, arma::dvec q,
+        arma::dvec q_dot, uint element_id);
+
 };

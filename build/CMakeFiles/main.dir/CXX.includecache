@@ -233,8 +233,10 @@ armadillo
 -
 vector
 -
-include/gnuplot-iostream.h
-/home/thanos/Desktop/PhDDevelopment/MastersDissertation/FEM/needle_dynamics/include/gnuplot-iostream.h
+chrono
+-
+thread
+-
 rigid_body.h
 /home/thanos/Desktop/PhDDevelopment/MastersDissertation/FEM/needle_dynamics/rigid_body.h
 flexible_beam_fem.h
@@ -245,6 +247,8 @@ system_fem.h
 /home/thanos/Desktop/PhDDevelopment/MastersDissertation/FEM/needle_dynamics/system_fem.h
 numerical_integration.hpp
 /home/thanos/Desktop/PhDDevelopment/MastersDissertation/FEM/needle_dynamics/numerical_integration.hpp
+include/gnuplot-iostream.h
+/home/thanos/Desktop/PhDDevelopment/MastersDissertation/FEM/needle_dynamics/include/gnuplot-iostream.h
 post_processing_fem.hpp
 /home/thanos/Desktop/PhDDevelopment/MastersDissertation/FEM/needle_dynamics/post_processing_fem.hpp
 needle_animation.hpp

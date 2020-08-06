@@ -1,15 +1,16 @@
 #include <iostream>
 #include <armadillo>
 #include <vector>
-#include "include/gnuplot-iostream.h"
-
+#include <chrono>
+#include <thread>
 
 #include "rigid_body.h"
 #include "flexible_beam_fem.h"
 #include "input_trajectory.h"
 #include "system_fem.h"
-
 #include "numerical_integration.hpp"
+
+#include "include/gnuplot-iostream.h"
 #include "post_processing_fem.hpp"
 #include "needle_animation.hpp"
 
@@ -17,7 +18,7 @@
 int main(int argc, char *argv[])
 {
     // Number of elements 
-    uint ne = 1;
+    uint ne = 2;
 
     // Dofs per element 
     uint element_dofs = 10;
@@ -44,12 +45,14 @@ int main(int argc, char *argv[])
     arma::dvec state0 = arma::join_vert(qa0, qa0_dot);
     state_vector.push_back(state0);
 
+    system.calculate(state0, 0.0);
+
     // Reaction forces 
     std::vector<double> fx, fy, fz;
 
     // Timing
     double t_final = 10.0; // Final time (s)
-    double fs = 1e4;  // Simulation frequency (Hz)
+    double fs = 5e3;  // Simulation frequency (Hz)
     double h = 1.0 / fs; // Integration time step (s)
     double t = 0; // Initial time (s) 
     
@@ -106,13 +109,23 @@ int main(int argc, char *argv[])
     // gp << "plot '-' with lines \n";
     // gp.send1d(t_fz);
 
+
     // Animation
     NeedleAnimation needle_animation(&needle, &post_processing_fem);
-    double animation_fs = 1e2; // Animation frequency
-    int steps = fs / animation_fs;
+    double animation_frequency = 30; // (Hz) Frames per sec
+    double animation_period_sec = 1 / animation_frequency; // (s)
+    uint animation_period =  1000 * animation_period_sec; // (ms)
+    uint steps = fs / animation_frequency;
 
-    for(size_t i = 0; i <= state_vector.size(); i = i + steps)
+    // Clock
+    auto start = std::chrono::steady_clock::now();
+    double real_time = 0;
+
+    for(size_t i = 0; i <= time_vector.size(); i = i + steps)
     {
+        auto end = std::chrono::steady_clock::now();
+        std::chrono::duration<double> elapsed_seconds = end-start;
+
         // Current state and time 
         arma::dvec x_current = state_vector.at(i);
         double t_current = time_vector.at(i);
@@ -134,5 +147,15 @@ int main(int argc, char *argv[])
 
         // Animation
         needle_animation.animate(roa_g_g, euler_angles, qf);
+
+        // Delay
+        std::this_thread::sleep_for(std::chrono::milliseconds(animation_period));
+
+        // Calculate Real time
+        double real_time = real_time + elapsed_seconds.count();
+
+        // Update time
+        start = end;
     }
+    
 }

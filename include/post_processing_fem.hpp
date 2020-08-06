@@ -78,19 +78,12 @@ arma::dmat PostProcessingFem<T>::get_beam_coordinates_ffr(arma::dmat elastic_coo
 
     for (int j = 1; j <= m_elements_num; j++)
     {
-        arma::ivec l_vec_j = arma::regspace<arma::ivec>(5 * j - 4, 1, 
-            5 * j + 5);
-         
-        arma::dmat lj_mat = dm::locator_matrix(l_vec_j, m_dofs_num);
-
-        // Element local coordinates 
-        arma::dvec e_j =  lj_mat * elastic_coordinates;
-       
         for (int i = 0; i < npel; i++) 
         {   
             // Deformation of point pj
-            double ksi = x2j_vec(i) / m_element_length;
-            arma::dvec rp0pj_f_f = m_needle_ptr->get_element_deflection(ksi, e_j, j);
+            arma::dvec rp0pj_f_f =
+                m_needle_ptr->get_element_deflection(x2j_vec(i),
+                elastic_coordinates, j);
 
             // Initial position of pj wrt to f origin
             arma::dvec rap0j_f_f = { (double) (j - 1) * m_element_length + 
@@ -131,20 +124,12 @@ arma::dmat PostProcessingFem<T>::get_beam_coordinates_inertial(arma::dvec roa_g_
 
     for (int j = 1; j <= m_elements_num; j++)
     {
-
-        arma::ivec l_vec_j = arma::regspace<arma::ivec>(5 * j - 4, 1, 
-            5 * j + 5);
-        
-        arma::dmat lj_mat = dm::locator_matrix(l_vec_j, m_dofs_num);
-
-        // Element local coordinates 
-        arma::dvec e_j =  lj_mat * elastic_coordinates;
-       
         for (int i = 0; i < npel; i++) 
         { 
             // Deformation of point pj
-            double ksi = x2j_vec(i) / m_element_length;
-            arma::dvec rp0pj_f_f = m_needle_ptr->get_element_deflection(ksi, e_j, j);
+            arma::dvec rp0pj_f_f = 
+                m_needle_ptr->get_element_deflection(x2j_vec(i),
+                elastic_coordinates, j);
 
             // Initial position of pj wrt to f origin
             arma::dvec rap0j_f_f = { (double) (j - 1) * m_element_length + 

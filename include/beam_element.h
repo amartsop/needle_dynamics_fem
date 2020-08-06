@@ -33,12 +33,15 @@ public:
     // Get number of dofs 
     uint get_dofs_number(void) { return m_dofs; }
 
-    // Update element matrices, coriolis and external force vector
-    void update(arma::dvec q, arma::dvec q_dot, arma::dvec fbj_f, 
-        arma::dvec tsj_f);
+    // Update element state, mass matrix and coriolis vector
+    void update(double t, arma::dvec q, arma::dvec q_dot);
+    
+    // External forces 
+    void calculate_external_forces(arma::dvec int1, arma::dvec int2, 
+        arma::dvec int3, arma::dvec fbj_f);
 
     // Get element's deflection
-    arma::dvec get_deflection(double ksi, arma::dvec ej);
+    arma::dvec get_deflection(double xj, arma::dvec elastic_coordinates);
 
 private:
     // Element id
@@ -62,11 +65,18 @@ private:
     // Element cross-sectional area (m^2)
     double m_area;
 
+    // Distance of element left node from reference frame (m)
+    arma::dvec m_raaoj_f_f;
+
     // Distance of element centre of mass from reference frame (m)
     arma::dvec m_racoj_f_f;
 
-    // Distance of element right node from reference frame (m)
-    arma::dvec m_raboj_f_f;
+    // Inertial tensor of element j wrt to the centre of mass
+    // of element j(reference frame) (kg * m^2)
+    arma::dmat m_i_coj_f;
+
+    // Inertial tensor of element j wrt to point A (reference frame) (kg * m^2)
+    arma::dmat m_i_a_fj;
 
     // Number of dofs
     uint m_dofs;
@@ -81,9 +91,43 @@ private:
     arma::dvec m_weight_F;
 
 private:
-    // Shape integrals
-    arma::dmat m_nj, m_phi11j, m_phi12j, m_phi13j, m_phi22j, m_phi23j, m_phi33j;
-    arma::dmat m_phi21j, m_phi31j, m_phi32j;
+    // State 
+    arma::dvec m_roa_g_g, m_theta, m_qf, m_omega;
+
+    // State dot 
+    arma::dvec m_roa_dot_g_g, m_theta_dot, m_qf_dot;
+
+    // G and Gdot matrices
+    arma::dmat m_g_mat, m_g_dot_mat;
+
+    // Rotation matrix 
+    arma::dmat m_rot_f_F;
+
+    // Current time 
+    double m_time;
+
+private:
+    // Shape integrals dash
+    arma::dmat m_phi11j_dash, m_phi12j_dash, m_phi13j_dash;
+    arma::dmat m_phi21j_dash, m_phi22j_dash, m_phi23j_dash;
+    arma::dmat m_phi31j_dash, m_phi32j_dash, m_phi33j_dash;
+
+    // Shape integrals hat
+    arma::drowvec m_phi11j_hat, m_phi12j_hat, m_phi13j_hat;
+    arma::drowvec m_phi21j_hat, m_phi22j_hat, m_phi23j_hat;
+    arma::drowvec m_phi31j_hat, m_phi32j_hat, m_phi33j_hat;
+
+    // Nj integrals
+    arma::dmat m_nj_int[12];
+    
+    // Number of axial dofs 
+    const uint m_axial_dofs = 2;
+
+    // Number of bending dofs y direction
+    const uint m_bending_y_dofs = 4;
+
+    // Number of bending dofs z direction
+    const uint m_bending_z_dofs = 4;
 
     // Locator vectors
     const arma::ivec m_luj = {1, 6};
@@ -114,32 +158,26 @@ private:
 
 private:
 
-    // Inertial tensor calculation
-    arma::dmat inertial_tensor_calculation(arma::dvec q, arma::dvec q_dot);
-
-    // Dj matrix 
-    arma::dmat dj_matrix_caclulation(arma::dvec q, arma::dvec q_dot);
-
-    // Oj matrix 
-    arma::dmat oj_matrix_caclulation(void);
-
     // Mass matrix calculation
-    void mass_matrix_calculation(arma::dvec q, arma::dvec q_dot); 
+    void mass_matrix_calculation(void); 
 
     // Stiffness matrix calculation
     void stiffness_matrix_calculation(void);
 
     // Coriolis-Centrifugal calculation
-    void coriolis_vector_calculation(arma::dvec q, arma::dvec q_dot);
+    void coriolis_vector_calculation(void);
 
-    // External force vector calculation
-    void external_force_vector_calculation(arma::dvec q, arma::dvec q_dot,
-        arma::dvec fbj_f, arma::dvec tsj_f);
+    // Nj integrals 
+    void nj_integrals(void);
 
     // Shape integrals calculation
-    void shape_integrals_calculation(void);
+    void shape_integrals(void);
 
+public:
     // Shape function calculation
-    arma::dmat shape_function(double ksi);
+    arma::dmat shape_function(double xj);
+
+    // Dj(x) function
+    arma::dmat dj_x(double xj);
 
 };

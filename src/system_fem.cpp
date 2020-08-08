@@ -90,6 +90,7 @@ arma::dvec SystemFem::calculate(arma::dvec state_vector, double t)
     m_qg_force = m_mgg * qg_ddot + m_mga * qa_ddot + m_kgg * qg + m_kga * qa 
         - m_fvg;
 
+
     // System model
     arma::dvec x1_dot = x2;
     arma::dvec x2_dot = qa_ddot;

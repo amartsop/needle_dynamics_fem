@@ -18,7 +18,7 @@
 int main(int argc, char *argv[])
 {
     // Number of elements 
-    uint ne = 2;
+    uint ne = 1;
 
     // Dofs per element 
     uint element_dofs = 10;
@@ -52,7 +52,7 @@ int main(int argc, char *argv[])
 
     // Timing
     double t_final = 10.0; // Final time (s)
-    double fs = 5e3;  // Simulation frequency (Hz)
+    double fs = 2e4;  // Simulation frequency (Hz)
     double h = 1.0 / fs; // Integration time step (s)
     double t = 0; // Initial time (s) 
     
@@ -77,8 +77,8 @@ int main(int argc, char *argv[])
 
         // Reaction forces 
         arma::dmat reaction_forces = system.get_reaction_forces();
-        fx.push_back(reaction_forces(0)); fy.push_back(reaction_forces(1));
-        fz.push_back(reaction_forces(2));
+        fx.push_back(reaction_forces(0 + 6)); fy.push_back(reaction_forces(1 + 6));
+        fz.push_back(reaction_forces(2 + 6));
 
         // reaction_forces.push_back(system.get_reaction_forces());
         if (!x.is_finite()) {
@@ -95,19 +95,19 @@ int main(int argc, char *argv[])
         std::cout << t << std::endl;
     }
 
-    // // Plot reaction forces 
-    // Gnuplot gp;
-    // arma::dvec t_vec(time_vector);
-    // arma::dvec fx_vec(fx);
-    // arma::dvec fy_vec(fy);
-    // arma::dvec fz_vec(fz);
+    // Plot reaction forces 
+    Gnuplot gp;
+    arma::dvec t_vec(time_vector);
+    arma::dvec fx_vec(fx);
+    arma::dvec fy_vec(fy);
+    arma::dvec fz_vec(fz);
 
-    // arma::dmat t_fx = arma::join_horiz(t_vec.rows(0, t_vec.n_rows - 2), fx_vec);
-    // arma::dmat t_fy = arma::join_horiz(t_vec.rows(0, t_vec.n_rows - 2), fy_vec);
-    // arma::dmat t_fz = arma::join_horiz(t_vec.rows(0, t_vec.n_rows - 2), fz_vec);
+    arma::dmat t_fx = arma::join_horiz(t_vec.rows(0, t_vec.n_rows - 2), fx_vec);
+    arma::dmat t_fy = arma::join_horiz(t_vec.rows(0, t_vec.n_rows - 2), fy_vec);
+    arma::dmat t_fz = arma::join_horiz(t_vec.rows(0, t_vec.n_rows - 2), fz_vec);
 
-    // gp << "plot '-' with lines \n";
-    // gp.send1d(t_fz);
+    gp << "plot '-' with lines \n";
+    gp.send1d(t_fx);
 
 
     // Animation

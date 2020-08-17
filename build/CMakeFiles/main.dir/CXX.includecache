@@ -114,7 +114,41 @@ iostream
 armadillo
 -
 
+.././include/needle_animation.hpp
+iostream
+-
+armadillo
+-
+vector
+-
+euler_rotations.h
+.././include/euler_rotations.h
+gnuplot-iostream.h
+.././include/gnuplot-iostream.h
+
 .././include/needle_properties.hpp
+
+.././include/numerical_integration.hpp
+iostream
+-
+vector
+-
+armadillo
+-
+
+.././include/post_processing_fem.hpp
+iostream
+-
+armadillo
+-
+vector
+-
+euler_rotations.h
+.././include/euler_rotations.h
+gnuplot-iostream.h
+.././include/gnuplot-iostream.h
+dynamics_math.h
+.././include/dynamics_math.h
 
 .././include/system_fem.h
 iostream
@@ -147,6 +181,12 @@ flexible_beam_fem.h
 /home/thanos/Desktop/PhDDevelopment/MastersDissertation/FEM/needle_dynamics/flexible_beam_fem.h
 system_fem.h
 /home/thanos/Desktop/PhDDevelopment/MastersDissertation/FEM/needle_dynamics/system_fem.h
+post_processing_fem.hpp
+/home/thanos/Desktop/PhDDevelopment/MastersDissertation/FEM/needle_dynamics/post_processing_fem.hpp
+numerical_integration.hpp
+/home/thanos/Desktop/PhDDevelopment/MastersDissertation/FEM/needle_dynamics/numerical_integration.hpp
+needle_animation.hpp
+/home/thanos/Desktop/PhDDevelopment/MastersDissertation/FEM/needle_dynamics/needle_animation.hpp
 
 /home/thanos/Desktop/PhDDevelopment/MastersDissertation/FEM/needle_dynamics/src/beam_element.cpp
 beam_element.h

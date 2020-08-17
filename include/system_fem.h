@@ -16,37 +16,25 @@ public:
     // Calculate system model function 
     arma::dvec f(double t, arma::dvec state_vector);
 
-    // // Get reaction forces 
-    // arma::dvec get_reaction_forces(void) { return m_qg_force; }
+    // Calculate system's Jacobian
+    arma::dmat dfdx(double t, arma::dvec x);
 
-    // // Get uknown vector size 
-    // uint get_qa_size(void) { return m_qa_size; }
+    // Get reaction forces 
+    arma::dvec get_reaction_forces(void) { return m_fc_f; }
 
-    // // Get model size 
-    // uint get_model_size(void) {return 2 * m_qa_size; }
+    // Get reaction forces 
+    arma::dvec get_reaction_moment(void) { return m_mc_f; }
 
 private:
 
     // Number of elastic dofs
     uint m_elastic_dofs;
 
-    // // Number of elements
-    // uint m_elements;
+    // Raction force 
+    arma::dvec m_fc_f;
 
-    // // Number of dofs
-    // uint m_dofs;
-
-    // // Indices of all coordinates 
-    // arma::ivec m_l;
-
-    // // Indices of uknown coordinates
-    // arma::ivec m_la;
-
-    // // Indices of known coordinates 
-    // const arma::ivec m_lg = arma::regspace<arma::ivec>(1, 1, 6 + (10 / 2));
-
-    // // Size of qa vector 
-    // uint m_qa_size;
+    // Raction Moment
+    arma::dvec m_mc_f;
 
 private:
     // Rigid body (handle)
@@ -58,9 +46,19 @@ private:
     // Input coordinates 
     InputTrajectory* m_input_traj_ptr;
 
+
 private:
     // Calculate coordinates transformation matrix 
     void coordinate_transformation_matrix(void);
+
+    // Elastic damping matrix calculation
+    void elastic_damping_matrix_calculation(void);
+
+    // Total damping matrix calculation
+    void total_damping_matrix_calculation(void);
+    
+    // Total damping matrix
+    arma::dmat m_cf;
 
     // Transformation matrix 
     arma::dmat m_p_mat;
@@ -68,32 +66,25 @@ private:
     // First two frequencies 
     arma::dvec m_freq = arma::zeros<arma::dvec>(2, 1);
 
-    // Elastic mass and stiffness matrices
-    arma::dmat m_mf33, m_kf33;
+    // Systen eigenvalues 
+    arma::dvec m_eigval;
 
-// private:
-//     // System mass and stiffness matrix
-//     arma::dmat m_mass, m_stiffness;
+    // Elastic mass, stiffness and damping matrices
+    arma::dmat m_mf33, m_kf33, m_cf33;
     
-//     // System coriolis-centrifugal and external forces vector
-//     arma::dvec m_fv;
+    // Transformed elastic mass, stiffness and damping matrices
+    arma::dmat m_mf33_tilde, m_kf33_tilde, m_cf33_tilde;
 
+    // Damping coeefficients 
+    double m_mu, m_kappa;
 
-// private:
-//     // Mass matrix of known and uknown coefficients
-//     arma::dmat m_mgg, m_mga, m_mag, m_maa;
+    // Damping ratio
+    const double m_zeta1 = 0.1;
+    const double m_zeta2 = 0.1;
 
-//     // Stiffness matrix of known and uknown coefficients
-//     arma::dmat m_kgg, m_kga, m_kag, m_kaa;
+private:
+    // Numerical Jacobian tolerance
+    double m_tol = 1.0e-8;
 
-//     // Coriolis vector of known and uknown coefficients 
-//     arma::dvec m_fva, m_fvg;
-
-//     // External forces vector of known and uknown coefficients 
-//     arma::dvec m_qa_force, m_qg_force;
-
-// private:
-//     // Update matrices and vectors 
-//     void update(double t, arma::dvec q, arma::dvec q_dot);
 };
 

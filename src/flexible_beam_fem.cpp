@@ -216,11 +216,9 @@ arma::dvec FlexibleBeamFem::external_force(uint element_id)
     {
         fx = 0.0 * m_time;
         fy = 0.0 * m_time;
-        fz = 0.5 * m_time;
-
-        if (fx >= 0.5) { fx =  0.5; }
-        if (fy >= 0.5) { fy =  0.0; }
-        if (fz >= 0.5) { fz = 0.5; }
+        fz = 0.0;
+        
+        if(m_time > 1.0) { fz = 0.5; }
 
     }
     else
@@ -249,6 +247,7 @@ arma::dvec FlexibleBeamFem::get_element_deflection(double xj, arma::dvec
     return m_beam_element.at(element_id - 1)->get_deflection(xj,
         elastic_coordinates);
 }
+
 
 FlexibleBeamFem::~FlexibleBeamFem()
 {

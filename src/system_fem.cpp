@@ -21,6 +21,21 @@ SystemFem::SystemFem(Handle *handle, FlexibleBeamFem *needle,
 
     // Calculate coordinates transformation matrix 
     coordinate_transformation_matrix();
+
+    // Transformed elastic mass and stiffness matrices
+    m_mf33_tilde = m_p_mat.t() * m_mf33 * m_p_mat;
+    m_kf33_tilde = m_p_mat.t() * m_kf33 * m_p_mat;
+
+    // First two frequencies
+    m_freq(0) = sqrt(arma::as_scalar(m_eigval(0)));
+    m_freq(1) = sqrt(arma::as_scalar(m_eigval(2)));
+
+    // Calculate damping elastic matrix
+    elastic_damping_matrix_calculation();
+
+    // Calculate total damping matrix
+    total_damping_matrix_calculation();
+
 }
 
 arma::dvec SystemFem::f(double t, arma::dvec state_vector)
@@ -79,10 +94,6 @@ arma::dvec SystemFem::f(double t, arma::dvec state_vector)
     // Get mass matrices
     arma::dmat mf31 = m_needle_ptr->get_mf31_matrix();
     arma::dmat mf32 = m_needle_ptr->get_mf32_matrix();
-    arma::dmat mf33 = m_needle_ptr->get_mf33_matrix();
-
-    // Stiffness matrices 
-    arma::dmat kf33 = m_needle_ptr->get_kf33_matrix();
 
     // Get fvf3 vector
     arma::dvec fvf3 = m_needle_ptr->get_fvf3_vector();
@@ -99,65 +110,114 @@ arma::dvec SystemFem::f(double t, arma::dvec state_vector)
     arma::dvec tau3 = fvf3 + qf3 - mf31 * roa_ddot_F_F - mf32 * theta_ddot_f;
 
     /************************ Coordinate transformation *******************/
+    // State transformation 
+    arma::dvec qf_tilde = m_p_mat.t() * m_mf33 * qf;
+    arma::dvec qf_tilde_dot = m_p_mat.t() * m_mf33 * qf_dot;
 
-    // // Calculate elastic acceleration
-    // arma::dvec qf_ddot = arma::solve(mf33, tau3 - cf33 * qf_dot - kf33 * qf);
+    // Force vector transformation 
+    arma::dvec tau3_tilde = m_p_mat.t() * tau3;
 
-    // // Total Acceleration
-    // arma::dvec q_ddot = arma::join_vert(roa_ddot_F_F, theta_ddot_f, qf_ddot);
+    // Calculate elastic acceleration (transformed)
+    arma::dvec qf_tilde_ddot = arma::solve(m_mf33_tilde, tau3_tilde -
+        m_cf33_tilde * qf_tilde_dot - m_kf33_tilde * qf_tilde);
 
-    // // Reaction forces 
-    // arma::dmat mf = m_needle_ptr->get_mass_matrix();
-    // arma::dmat cf = m_needle_ptr->get_damping_matrix();
-    // arma::dmat kf = m_needle_ptr->get_stiffness_matrix();
-    // arma::dvec fvf = m_needle_ptr->get_coriolis_vector();
-    // arma::dvec qforce = m_needle_ptr->get_external_force();
+    // Calculate elastic acceleration
+    arma::dvec qf_ddot = m_p_mat * qf_tilde_ddot;
 
-    // // Total reaction force
-    // arma::dvec reaction_force = mf * q_ddot + cf * q_dot + kf * q - fvf - qforce;
+    // Total Acceleration
+    arma::dvec q_ddot = arma::join_vert(roa_ddot_F_F, theta_ddot_f, qf_ddot);
 
-    // // Reaction force at point a 
-    // arma::dvec qc1 = {reaction_force(0), reaction_force(1), reaction_force(2)};
-    // arma::dvec qc2 = {reaction_force(3), reaction_force(4), reaction_force(5)};
-    // arma::dvec fa_F = - qc1; arma::dvec ma_f = - arma::solve(g_mat.t(), qc2);
+    /********************** Reaction forces *************************/
+    arma::dmat mf = m_needle_ptr->get_mass_matrix();
+    arma::dmat kf = m_needle_ptr->get_stiffness_matrix();
+    arma::dvec fvf = m_needle_ptr->get_coriolis_vector();
+    arma::dvec qforce = m_needle_ptr->get_external_force_vector();
 
-    // // Reaction force at point c
-    // arma::dvec fc_F = m_handle_ptr->get_handle_mass() * roc_ddot_F_F -
-    //     m_handle_ptr->get_weight_force() - fa_F;
+    // Total reaction force
+    arma::dvec reaction_force = mf * q_ddot + m_cf * q_dot + kf * q - fvf - qforce;
 
-    // m_fc_f = rot_f_F.t() * fc_F;
+    // Reaction force at point a 
+    arma::dvec qc1 = {reaction_force(0), reaction_force(1), reaction_force(2)};
+    arma::dvec qc2 = {reaction_force(3), reaction_force(4), reaction_force(5)};
+    arma::dvec fa_F = - qc1; arma::dvec ma_f = - arma::solve(g_mat.t(), qc2);
 
-    // // Handle inertial tensor 
-    // arma::dmat ic_f = m_handle_ptr->get_inertial_tensor(); 
+    // Reaction force at point c
+    arma::dvec fc_F = m_handle_ptr->get_handle_mass() * roc_ddot_F_F -
+        m_handle_ptr->get_weight_force() - fa_F;
 
-    // // Reaction moment at point c
-    // m_mc_f = ic_f * (g_dot_mat * theta_r + g_mat * theta_ddot_r) - ma_f -
-    //     dm::s(m_handle_ptr->get_rca_f_f()) * rot_f_F.t() * fa_F -
-    //     dm::s(omega) * ic_f * omega;
+    m_fc_f = rot_f_F.t() * fc_F;
+
+    // Handle inertial tensor 
+    arma::dmat ic_f = m_handle_ptr->get_inertial_tensor(); 
+
+    // Reaction moment at point c
+    m_mc_f = ic_f * (g_dot_mat * theta_r + g_mat * theta_ddot_r) - ma_f -
+        dm::s(m_handle_ptr->get_rca_f_f()) * rot_f_F.t() * fa_F -
+        dm::s(omega) * ic_f * omega;
 
 
-    // return arma::join_vert(qf_dot, qf_ddot);
-
-
-
+    return arma::join_vert(qf_dot, qf_ddot);
 }
 
 
-// void SystemFem::update(double t, arma::dvec q, arma::dvec q_dot)
-// {
-//     // Update mass, stiffness, coriolis and external forces 
-//     m_handle_ptr->update(t, q, q_dot);
-//     m_needle_ptr->update(t, q, q_dot);
+// Numerical estimation of system's jacobian
+arma::dmat SystemFem::dfdx(double t, arma::dvec x)
+{
+    arma::dvec fx = f(t, x); arma::dvec x_pert = x;
+    arma::dmat jacobian = arma::zeros(fx.n_rows, x.n_rows);
 
-//     // Total mass matrix
-//     m_mass = m_handle_ptr->get_mass_matrix() + m_needle_ptr->get_mass_matrix();
+    for (uint i = 0; i < x.n_rows; i ++)
+    {
+        x_pert(i) = x_pert(i) + m_tol;
+        jacobian.col(i) = (f(t, x_pert) - fx) / m_tol;
+        x_pert(i) = x(i);
+    }
+    return jacobian;
+}
 
-//     // Total stiffness matrix 
-//     m_stiffness = m_needle_ptr->get_stiffness_matrix();
 
-//     // Total coriolis force matrix 
-//     m_fv = m_handle_ptr->get_coriolis_vector() + m_needle_ptr->get_coriolis_vector();
-// }
+// Elastic damping matrix
+void SystemFem::elastic_damping_matrix_calculation(void)
+{
+    double omega1 = arma::as_scalar(m_freq(0));
+    double omega2 = arma::as_scalar(m_freq(1));
+
+    // Rayleigh Damping
+    m_kappa = 2.0 * (m_zeta2 * omega2 - m_zeta1 * omega1) /
+        (pow(omega2, 2.0) - pow(omega1, 2.0));
+
+    m_mu = 2.0 * m_zeta1 * omega1 - pow(omega1, 2.0) * m_kappa;
+
+    // Transformed damping matrix 
+    m_cf33_tilde = m_mu * m_mf33_tilde + m_kappa * m_kf33_tilde;
+
+    // Damping matrix
+    m_cf33 = m_mf33 * m_p_mat * m_cf33_tilde * m_p_mat.t() * m_mf33;
+}
+
+
+// Total damping matrix
+void SystemFem::total_damping_matrix_calculation(void)
+{
+    // First row 
+    arma::dmat cf11 = arma::zeros(3, 3); arma::dmat cf12 = arma::zeros(3, 3);
+    arma::dmat cf13 = arma::zeros(3, m_elastic_dofs);
+    arma::dmat cf1 = arma::join_horiz(cf11, cf12, cf13);
+
+    // Second row 
+    arma::dmat cf21 = arma::zeros(3, 3); arma::dmat cf22 = arma::zeros(3, 3);
+    arma::dmat cf23 = arma::zeros(3, m_elastic_dofs);
+    arma::dmat cf2 = arma::join_horiz(cf21, cf22, cf23);
+
+    // Third row 
+    arma::dmat cf31 = arma::zeros(m_elastic_dofs, 3);
+    arma::dmat cf32 = arma::zeros(m_elastic_dofs, 3);
+    arma::dmat cf3 = arma::join_horiz(cf31, cf32, m_cf33);
+
+    // Total damping matrix 
+    m_cf = arma::join_vert(cf1, cf2, cf3);
+}
+
 
 // Calculate coordinates transformation matrix 
 void SystemFem::coordinate_transformation_matrix(void)
@@ -169,11 +229,11 @@ void SystemFem::coordinate_transformation_matrix(void)
     arma::dmat eigvec_u = arma::real(eigvec_gu);
 
     // Sorted eigenvalues and eigenvectors
-    arma::dvec eigval = arma::sort(eigval_u);
+    m_eigval = arma::sort(eigval_u);
     arma::uvec eig_indices = arma::sort_index(eigval_u);
     arma::dmat eigvec = arma::zeros(eigvec_u.n_rows, eigvec_u.n_cols);
 
-    for(uint i = 0; i < eigval.n_rows; i++)
+    for(uint i = 0; i < m_eigval.n_rows; i++)
     {
         eigvec.col(i) = eigvec_u.col(eig_indices(i));
     }
@@ -182,10 +242,9 @@ void SystemFem::coordinate_transformation_matrix(void)
     m_p_mat = arma::zeros(eigvec_u.n_rows, eigvec_u.n_cols);
 
     // Normalize eigenvectors
-    for(uint i = 0; i < eigval.n_rows; i++)
+    for(uint i = 0; i < m_eigval.n_rows; i++)
     {
         double mi = arma::as_scalar((eigvec.col(i)).t() * m_mf33 * eigvec.col(i));
         m_p_mat.col(i) = (1.0 / sqrt(mi)) * eigvec.col(i);
     }
 }
-

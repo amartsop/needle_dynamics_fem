@@ -17,7 +17,7 @@ void InputTrajectory::rigid_body_trajectory(double t)
     // /******************* Position *******************/
 
     // Position amplitude (m)
-   arma::dvec a_p = {0.0, 0.0, 0.0};
+   arma::dvec a_p = {0.0, 0.0, 0.2};
 
     // Position frequency (Hz)
     arma::dvec f_p = {1.0, 5.0, 2.0};

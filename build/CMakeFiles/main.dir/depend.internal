@@ -4,11 +4,15 @@
 CMakeFiles/main.dir/main.cpp.o
  .././include/beam_element.h
  .././include/dynamics_math.h
+ .././include/euler_rotations.h
  .././include/flexible_beam_fem.h
  .././include/gnuplot-iostream.h
  .././include/handle.h
  .././include/input_trajectory.h
+ .././include/needle_animation.hpp
  .././include/needle_properties.hpp
+ .././include/numerical_integration.hpp
+ .././include/post_processing_fem.hpp
  .././include/system_fem.h
  /home/thanos/Desktop/PhDDevelopment/MastersDissertation/FEM/needle_dynamics/main.cpp
 CMakeFiles/main.dir/src/beam_element.cpp.o

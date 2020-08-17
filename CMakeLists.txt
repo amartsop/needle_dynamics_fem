@@ -26,12 +26,12 @@ set(ALL_LIBS
 
 set(SOURCES
   ./src/dynamics_math.cpp
-  ./src/rigid_body.cpp
-  ./src/flexible_beam_fem.cpp
-  ./src/beam_element.cpp
   ./src/euler_rotations.cpp
-  ./src/system_fem.cpp
   ./src/input_trajectory.cpp
+  ./src/handle.cpp
+  ./src/beam_element.cpp
+  ./src/flexible_beam_fem.cpp
+  ./src/system_fem.cpp
 )
 
   

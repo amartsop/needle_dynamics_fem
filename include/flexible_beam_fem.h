@@ -6,7 +6,6 @@
 #include <armadillo>
 #include <vector>
 
-#include "state.h"
 #include "needle_properties.hpp"
 #include "dynamics_math.h"
 #include "beam_element.h"
@@ -16,6 +15,11 @@ class FlexibleBeamFem : public NeedleProperties
 
 public:
     FlexibleBeamFem(uint elements);
+
+    ~FlexibleBeamFem();
+
+    // Update flexible body matrices and coriolis vector
+    void update(double t, arma::dvec q, arma::dvec q_dot);
 
     // Get elements number 
     uint get_elements_number(void) {return m_elements; }
@@ -30,13 +34,13 @@ public:
     arma::dvec get_coriolis_vector(void){ return m_fvf; }
 
     // External force vector getter
-    arma::dvec get_external_force_vector(void){ return m_qfj; }
+    arma::dvec get_external_force_vector(void){ return m_qforce; }
 
-    // Update flexible body matrices and coriolis vector
-    void update(double t, arma::dvec q, arma::dvec q_dot);
-
-    // Get total dofs number 
+    // Get total dofs
     uint get_total_dofs(void) { return m_dofs; }
+
+    // Get elastic dofs 
+    uint get_elastic_dofs(void) { return m_elastic_dofs; }
 
     // Get element deflection
        arma::dvec get_element_deflection(double xj, arma::dvec elastic_coordinates,
@@ -49,12 +53,22 @@ private:
     // Number of rigid dofs
     const uint m_rigid_dofs = 6;
 
-    // Number of elastic dofs
+    // Number of total elastic dofs
+    uint m_total_elastic_dofs;
+
+    // Number of elastic dofs (after boundary conditios)
     uint m_elastic_dofs;
 
     // Number of dofs
     uint m_dofs;
 
+    // Number of boundaries
+    const uint m_boundaries = 5;
+
+    // Boundary conditions vector 
+    const arma::ivec m_lb_vec = arma::regspace<arma::ivec>(1, m_boundaries);
+
+private:
     // Element lenght (m)
     double m_element_length;
 
@@ -81,18 +95,52 @@ private:
     arma::dvec m_fvf;
 
     // Flexible body external force vector
-    arma::dvec m_qfj;
+    arma::dvec m_qforce;
 
-// private:
-//     // Mass matrix of flexible body calculation 
-//     arma::dmat mass_matrix_calculation(arma::dvec q, arma::dvec q_dot); 
+private:
+    // External force body frame (position l) FB(t, q, q_dot)
+    arma::dvec external_force(uint element_id);
 
-    // External force per element (bj) body frame
-    arma::dvec external_force(double t, arma::dvec q, arma::dvec q_dot, uint 
-        element_id);
+    // Distributed load body frame p(t, x, q , q_dot)
+    arma::dvec distributed_load(double xj, uint element_id);
 
-    // Distributed load body frame pj(t, x, q , q_dot) (element j)
-    arma::dvec distributed_load(double t, double xj, arma::dvec q,
-        arma::dvec q_dot, uint element_id);
+private:
+    // State update 
+    void state_update(arma::dvec q, arma::dvec q_dot);
+
+private:
+    // State & state dot
+    arma::dvec m_q, m_q_dot;
+
+    // Current time 
+    double m_time;
+
+public:
+    arma::dmat get_mf31_matrix(void){ return m_mf31; }
+    arma::dmat get_mf32_matrix(void){ return m_mf32; }
+    arma::dmat get_mf33_matrix(void){ return m_mf33; }
+    arma::dmat get_kf33_matrix(void){ return m_kf33; }
+    arma::dmat get_fvf3_vector(void){ return m_fvf3; }
+    arma::dmat get_qf3_vector(void){ return m_qf3; }
+
+private:
+    // Elastic components
+    // Mass matrix components 
+    arma::dmat m_mf31, m_mf32, m_mf33;
+
+    // Stiffness matrix component
+    arma::dmat  m_kf33;
+
+    // Coriolis vector component 
+    arma::dvec m_fvf3; 
+
+    // External forces component 
+    arma::dvec m_qf3; 
+
+    // Elastic mass matrix calculation (constant)
+    void elastic_mass_matrix_calculation(void);
+
+    // Elastic stiffness matrix calculation
+    void elastic_stiffness_matrix_calculation(void);
 
 };

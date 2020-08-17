@@ -258,6 +258,33 @@ src/flexible_beam_fem.cpp.s:
 	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/flexible_beam_fem.cpp.s
 .PHONY : src/flexible_beam_fem.cpp.s
 
+src/handle.o: src/handle.cpp.o
+
+.PHONY : src/handle.o
+
+# target to build an object file
+src/handle.cpp.o:
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/handle.cpp.o
+.PHONY : src/handle.cpp.o
+
+src/handle.i: src/handle.cpp.i
+
+.PHONY : src/handle.i
+
+# target to preprocess a source file
+src/handle.cpp.i:
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/handle.cpp.i
+.PHONY : src/handle.cpp.i
+
+src/handle.s: src/handle.cpp.s
+
+.PHONY : src/handle.s
+
+# target to generate assembly for a file
+src/handle.cpp.s:
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/handle.cpp.s
+.PHONY : src/handle.cpp.s
+
 src/input_trajectory.o: src/input_trajectory.cpp.o
 
 .PHONY : src/input_trajectory.o
@@ -284,33 +311,6 @@ src/input_trajectory.s: src/input_trajectory.cpp.s
 src/input_trajectory.cpp.s:
 	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/input_trajectory.cpp.s
 .PHONY : src/input_trajectory.cpp.s
-
-src/rigid_body.o: src/rigid_body.cpp.o
-
-.PHONY : src/rigid_body.o
-
-# target to build an object file
-src/rigid_body.cpp.o:
-	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/rigid_body.cpp.o
-.PHONY : src/rigid_body.cpp.o
-
-src/rigid_body.i: src/rigid_body.cpp.i
-
-.PHONY : src/rigid_body.i
-
-# target to preprocess a source file
-src/rigid_body.cpp.i:
-	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/rigid_body.cpp.i
-.PHONY : src/rigid_body.cpp.i
-
-src/rigid_body.s: src/rigid_body.cpp.s
-
-.PHONY : src/rigid_body.s
-
-# target to generate assembly for a file
-src/rigid_body.cpp.s:
-	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/rigid_body.cpp.s
-.PHONY : src/rigid_body.cpp.s
 
 src/system_fem.o: src/system_fem.cpp.o
 
@@ -363,12 +363,12 @@ help:
 	@echo "... src/flexible_beam_fem.o"
 	@echo "... src/flexible_beam_fem.i"
 	@echo "... src/flexible_beam_fem.s"
+	@echo "... src/handle.o"
+	@echo "... src/handle.i"
+	@echo "... src/handle.s"
 	@echo "... src/input_trajectory.o"
 	@echo "... src/input_trajectory.i"
 	@echo "... src/input_trajectory.s"
-	@echo "... src/rigid_body.o"
-	@echo "... src/rigid_body.i"
-	@echo "... src/rigid_body.s"
 	@echo "... src/system_fem.o"
 	@echo "... src/system_fem.i"
 	@echo "... src/system_fem.s"

@@ -1,29 +1,13 @@
 #include "input_trajectory.h"
 
 
-InputTrajectory::InputTrajectory(uint dofs_per_node)
+InputTrajectory::InputTrajectory(void)
 {
-    // Dofs per node 
-    m_dofs_per_node = dofs_per_node;
-
-    // First node coordinates
-    first_node_position = arma::zeros(m_dofs_per_node);
-    first_node_velocity = arma::zeros(m_dofs_per_node);
-    first_node_acceleration = arma::zeros(m_dofs_per_node);
 }
 
 void InputTrajectory::update(double t)
 {
     rigid_body_trajectory(t);
-
-    // Known postions
-    m_qg = arma::join_vert(m_roa, m_theta, first_node_position);
-
-    // Known velocities
-    m_qg_dot = arma::join_vert(m_roa_dot, m_theta_dot, first_node_velocity);
-
-    // Known accelerations
-    m_qg_ddot = arma::join_vert(m_roa_ddot, m_theta_ddot, first_node_acceleration);
 
 }
 
@@ -33,10 +17,10 @@ void InputTrajectory::rigid_body_trajectory(double t)
     // /******************* Position *******************/
 
     // Position amplitude (m)
-   arma::dvec a_p = {0.2, 0.0, 0.2};
+   arma::dvec a_p = {0.0, 0.0, 0.0};
 
     // Position frequency (Hz)
-    arma::dvec f_p = {1.0, 0.0, 3.0};
+    arma::dvec f_p = {1.0, 5.0, 2.0};
 
     // Position phase (rad)
     arma::dvec phi_p = {0.0, 0.0, 0.0};
@@ -46,7 +30,7 @@ void InputTrajectory::rigid_body_trajectory(double t)
     arma::dvec a_o = {0.0, 0.0, 0.0};
 
     // Euler angles frequency (Hz)
-    arma::dvec f_o = {0.0, 10.0, 0.0};
+    arma::dvec f_o = {1.0, 5.0, 1.1};
 
     // Euler angles phase (rad)
     arma::dvec phi_o = {0.0, 0.0, 0.0};
@@ -59,9 +43,9 @@ void InputTrajectory::rigid_body_trajectory(double t)
         double a_dot = 2.0 * M_PI * f_p(i);
         double a = a_dot * t + phi_p(i);
 
-        m_roa(i) = a_p(i) * sin(a);
-        m_roa_dot(i) = a_p(i) * a_dot * cos(a);
-        m_roa_ddot(i) = - a_p(i) * powf(a_dot, 2.0) * sin(a);
+        m_roc(i) = a_p(i) * sin(a);
+        m_roc_dot(i) = a_p(i) * a_dot * cos(a);
+        m_roc_ddot(i) = - a_p(i) * powf(a_dot, 2.0) * sin(a);
 
         // Rigid body rotational trajectory
         double b_dot = 2.0 * M_PI * f_o(i);

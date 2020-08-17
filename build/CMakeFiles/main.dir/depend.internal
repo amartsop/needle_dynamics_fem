@@ -4,24 +4,17 @@
 CMakeFiles/main.dir/main.cpp.o
  .././include/beam_element.h
  .././include/dynamics_math.h
- .././include/euler_rotations.h
  .././include/flexible_beam_fem.h
  .././include/gnuplot-iostream.h
+ .././include/handle.h
  .././include/input_trajectory.h
- .././include/needle_animation.hpp
  .././include/needle_properties.hpp
- .././include/numerical_integration.hpp
- .././include/post_processing_fem.hpp
- .././include/rigid_body.h
- .././include/state.h
  .././include/system_fem.h
- /home/thanos/Desktop/PhDDevelopment/MastersDissertation/FEM/needle_dynamics/include/gnuplot-iostream.h
  /home/thanos/Desktop/PhDDevelopment/MastersDissertation/FEM/needle_dynamics/main.cpp
 CMakeFiles/main.dir/src/beam_element.cpp.o
  .././include/beam_element.h
  .././include/dynamics_math.h
  .././include/euler_rotations.h
- .././include/state.h
  /home/thanos/Desktop/PhDDevelopment/MastersDissertation/FEM/needle_dynamics/src/beam_element.cpp
 CMakeFiles/main.dir/src/dynamics_math.cpp.o
  .././include/dynamics_math.h
@@ -34,25 +27,22 @@ CMakeFiles/main.dir/src/flexible_beam_fem.cpp.o
  .././include/dynamics_math.h
  .././include/flexible_beam_fem.h
  .././include/needle_properties.hpp
- .././include/state.h
  /home/thanos/Desktop/PhDDevelopment/MastersDissertation/FEM/needle_dynamics/src/flexible_beam_fem.cpp
+CMakeFiles/main.dir/src/handle.cpp.o
+ .././include/dynamics_math.h
+ .././include/euler_rotations.h
+ .././include/handle.h
+ .././include/needle_properties.hpp
+ /home/thanos/Desktop/PhDDevelopment/MastersDissertation/FEM/needle_dynamics/src/handle.cpp
 CMakeFiles/main.dir/src/input_trajectory.cpp.o
  .././include/input_trajectory.h
  /home/thanos/Desktop/PhDDevelopment/MastersDissertation/FEM/needle_dynamics/src/input_trajectory.cpp
-CMakeFiles/main.dir/src/rigid_body.cpp.o
- .././include/dynamics_math.h
- .././include/euler_rotations.h
- .././include/needle_properties.hpp
- .././include/rigid_body.h
- .././include/state.h
- /home/thanos/Desktop/PhDDevelopment/MastersDissertation/FEM/needle_dynamics/src/rigid_body.cpp
 CMakeFiles/main.dir/src/system_fem.cpp.o
  .././include/beam_element.h
  .././include/dynamics_math.h
  .././include/flexible_beam_fem.h
+ .././include/handle.h
  .././include/input_trajectory.h
  .././include/needle_properties.hpp
- .././include/rigid_body.h
- .././include/state.h
  .././include/system_fem.h
  /home/thanos/Desktop/PhDDevelopment/MastersDissertation/FEM/needle_dynamics/src/system_fem.cpp

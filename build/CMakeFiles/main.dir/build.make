@@ -105,81 +105,9 @@ CMakeFiles/main.dir/src/dynamics_math.cpp.o.provides: CMakeFiles/main.dir/src/dy
 CMakeFiles/main.dir/src/dynamics_math.cpp.o.provides.build: CMakeFiles/main.dir/src/dynamics_math.cpp.o
 
 
-CMakeFiles/main.dir/src/rigid_body.cpp.o: CMakeFiles/main.dir/flags.make
-CMakeFiles/main.dir/src/rigid_body.cpp.o: ../src/rigid_body.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/thanos/Desktop/PhDDevelopment/MastersDissertation/FEM/needle_dynamics/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/main.dir/src/rigid_body.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/main.dir/src/rigid_body.cpp.o -c /home/thanos/Desktop/PhDDevelopment/MastersDissertation/FEM/needle_dynamics/src/rigid_body.cpp
-
-CMakeFiles/main.dir/src/rigid_body.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/main.dir/src/rigid_body.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/thanos/Desktop/PhDDevelopment/MastersDissertation/FEM/needle_dynamics/src/rigid_body.cpp > CMakeFiles/main.dir/src/rigid_body.cpp.i
-
-CMakeFiles/main.dir/src/rigid_body.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/main.dir/src/rigid_body.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/thanos/Desktop/PhDDevelopment/MastersDissertation/FEM/needle_dynamics/src/rigid_body.cpp -o CMakeFiles/main.dir/src/rigid_body.cpp.s
-
-CMakeFiles/main.dir/src/rigid_body.cpp.o.requires:
-
-.PHONY : CMakeFiles/main.dir/src/rigid_body.cpp.o.requires
-
-CMakeFiles/main.dir/src/rigid_body.cpp.o.provides: CMakeFiles/main.dir/src/rigid_body.cpp.o.requires
-	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/rigid_body.cpp.o.provides.build
-.PHONY : CMakeFiles/main.dir/src/rigid_body.cpp.o.provides
-
-CMakeFiles/main.dir/src/rigid_body.cpp.o.provides.build: CMakeFiles/main.dir/src/rigid_body.cpp.o
-
-
-CMakeFiles/main.dir/src/flexible_beam_fem.cpp.o: CMakeFiles/main.dir/flags.make
-CMakeFiles/main.dir/src/flexible_beam_fem.cpp.o: ../src/flexible_beam_fem.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/thanos/Desktop/PhDDevelopment/MastersDissertation/FEM/needle_dynamics/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/main.dir/src/flexible_beam_fem.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/main.dir/src/flexible_beam_fem.cpp.o -c /home/thanos/Desktop/PhDDevelopment/MastersDissertation/FEM/needle_dynamics/src/flexible_beam_fem.cpp
-
-CMakeFiles/main.dir/src/flexible_beam_fem.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/main.dir/src/flexible_beam_fem.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/thanos/Desktop/PhDDevelopment/MastersDissertation/FEM/needle_dynamics/src/flexible_beam_fem.cpp > CMakeFiles/main.dir/src/flexible_beam_fem.cpp.i
-
-CMakeFiles/main.dir/src/flexible_beam_fem.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/main.dir/src/flexible_beam_fem.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/thanos/Desktop/PhDDevelopment/MastersDissertation/FEM/needle_dynamics/src/flexible_beam_fem.cpp -o CMakeFiles/main.dir/src/flexible_beam_fem.cpp.s
-
-CMakeFiles/main.dir/src/flexible_beam_fem.cpp.o.requires:
-
-.PHONY : CMakeFiles/main.dir/src/flexible_beam_fem.cpp.o.requires
-
-CMakeFiles/main.dir/src/flexible_beam_fem.cpp.o.provides: CMakeFiles/main.dir/src/flexible_beam_fem.cpp.o.requires
-	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/flexible_beam_fem.cpp.o.provides.build
-.PHONY : CMakeFiles/main.dir/src/flexible_beam_fem.cpp.o.provides
-
-CMakeFiles/main.dir/src/flexible_beam_fem.cpp.o.provides.build: CMakeFiles/main.dir/src/flexible_beam_fem.cpp.o
-
-
-CMakeFiles/main.dir/src/beam_element.cpp.o: CMakeFiles/main.dir/flags.make
-CMakeFiles/main.dir/src/beam_element.cpp.o: ../src/beam_element.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/thanos/Desktop/PhDDevelopment/MastersDissertation/FEM/needle_dynamics/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/main.dir/src/beam_element.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/main.dir/src/beam_element.cpp.o -c /home/thanos/Desktop/PhDDevelopment/MastersDissertation/FEM/needle_dynamics/src/beam_element.cpp
-
-CMakeFiles/main.dir/src/beam_element.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/main.dir/src/beam_element.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/thanos/Desktop/PhDDevelopment/MastersDissertation/FEM/needle_dynamics/src/beam_element.cpp > CMakeFiles/main.dir/src/beam_element.cpp.i
-
-CMakeFiles/main.dir/src/beam_element.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/main.dir/src/beam_element.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/thanos/Desktop/PhDDevelopment/MastersDissertation/FEM/needle_dynamics/src/beam_element.cpp -o CMakeFiles/main.dir/src/beam_element.cpp.s
-
-CMakeFiles/main.dir/src/beam_element.cpp.o.requires:
-
-.PHONY : CMakeFiles/main.dir/src/beam_element.cpp.o.requires
-
-CMakeFiles/main.dir/src/beam_element.cpp.o.provides: CMakeFiles/main.dir/src/beam_element.cpp.o.requires
-	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/beam_element.cpp.o.provides.build
-.PHONY : CMakeFiles/main.dir/src/beam_element.cpp.o.provides
-
-CMakeFiles/main.dir/src/beam_element.cpp.o.provides.build: CMakeFiles/main.dir/src/beam_element.cpp.o
-
-
 CMakeFiles/main.dir/src/euler_rotations.cpp.o: CMakeFiles/main.dir/flags.make
 CMakeFiles/main.dir/src/euler_rotations.cpp.o: ../src/euler_rotations.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/thanos/Desktop/PhDDevelopment/MastersDissertation/FEM/needle_dynamics/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/main.dir/src/euler_rotations.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/thanos/Desktop/PhDDevelopment/MastersDissertation/FEM/needle_dynamics/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/main.dir/src/euler_rotations.cpp.o"
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/main.dir/src/euler_rotations.cpp.o -c /home/thanos/Desktop/PhDDevelopment/MastersDissertation/FEM/needle_dynamics/src/euler_rotations.cpp
 
 CMakeFiles/main.dir/src/euler_rotations.cpp.i: cmake_force
@@ -201,33 +129,9 @@ CMakeFiles/main.dir/src/euler_rotations.cpp.o.provides: CMakeFiles/main.dir/src/
 CMakeFiles/main.dir/src/euler_rotations.cpp.o.provides.build: CMakeFiles/main.dir/src/euler_rotations.cpp.o
 
 
-CMakeFiles/main.dir/src/system_fem.cpp.o: CMakeFiles/main.dir/flags.make
-CMakeFiles/main.dir/src/system_fem.cpp.o: ../src/system_fem.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/thanos/Desktop/PhDDevelopment/MastersDissertation/FEM/needle_dynamics/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/main.dir/src/system_fem.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/main.dir/src/system_fem.cpp.o -c /home/thanos/Desktop/PhDDevelopment/MastersDissertation/FEM/needle_dynamics/src/system_fem.cpp
-
-CMakeFiles/main.dir/src/system_fem.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/main.dir/src/system_fem.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/thanos/Desktop/PhDDevelopment/MastersDissertation/FEM/needle_dynamics/src/system_fem.cpp > CMakeFiles/main.dir/src/system_fem.cpp.i
-
-CMakeFiles/main.dir/src/system_fem.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/main.dir/src/system_fem.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/thanos/Desktop/PhDDevelopment/MastersDissertation/FEM/needle_dynamics/src/system_fem.cpp -o CMakeFiles/main.dir/src/system_fem.cpp.s
-
-CMakeFiles/main.dir/src/system_fem.cpp.o.requires:
-
-.PHONY : CMakeFiles/main.dir/src/system_fem.cpp.o.requires
-
-CMakeFiles/main.dir/src/system_fem.cpp.o.provides: CMakeFiles/main.dir/src/system_fem.cpp.o.requires
-	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/system_fem.cpp.o.provides.build
-.PHONY : CMakeFiles/main.dir/src/system_fem.cpp.o.provides
-
-CMakeFiles/main.dir/src/system_fem.cpp.o.provides.build: CMakeFiles/main.dir/src/system_fem.cpp.o
-
-
 CMakeFiles/main.dir/src/input_trajectory.cpp.o: CMakeFiles/main.dir/flags.make
 CMakeFiles/main.dir/src/input_trajectory.cpp.o: ../src/input_trajectory.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/thanos/Desktop/PhDDevelopment/MastersDissertation/FEM/needle_dynamics/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/main.dir/src/input_trajectory.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/thanos/Desktop/PhDDevelopment/MastersDissertation/FEM/needle_dynamics/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/main.dir/src/input_trajectory.cpp.o"
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/main.dir/src/input_trajectory.cpp.o -c /home/thanos/Desktop/PhDDevelopment/MastersDissertation/FEM/needle_dynamics/src/input_trajectory.cpp
 
 CMakeFiles/main.dir/src/input_trajectory.cpp.i: cmake_force
@@ -249,28 +153,124 @@ CMakeFiles/main.dir/src/input_trajectory.cpp.o.provides: CMakeFiles/main.dir/src
 CMakeFiles/main.dir/src/input_trajectory.cpp.o.provides.build: CMakeFiles/main.dir/src/input_trajectory.cpp.o
 
 
+CMakeFiles/main.dir/src/handle.cpp.o: CMakeFiles/main.dir/flags.make
+CMakeFiles/main.dir/src/handle.cpp.o: ../src/handle.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/thanos/Desktop/PhDDevelopment/MastersDissertation/FEM/needle_dynamics/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/main.dir/src/handle.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/main.dir/src/handle.cpp.o -c /home/thanos/Desktop/PhDDevelopment/MastersDissertation/FEM/needle_dynamics/src/handle.cpp
+
+CMakeFiles/main.dir/src/handle.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/main.dir/src/handle.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/thanos/Desktop/PhDDevelopment/MastersDissertation/FEM/needle_dynamics/src/handle.cpp > CMakeFiles/main.dir/src/handle.cpp.i
+
+CMakeFiles/main.dir/src/handle.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/main.dir/src/handle.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/thanos/Desktop/PhDDevelopment/MastersDissertation/FEM/needle_dynamics/src/handle.cpp -o CMakeFiles/main.dir/src/handle.cpp.s
+
+CMakeFiles/main.dir/src/handle.cpp.o.requires:
+
+.PHONY : CMakeFiles/main.dir/src/handle.cpp.o.requires
+
+CMakeFiles/main.dir/src/handle.cpp.o.provides: CMakeFiles/main.dir/src/handle.cpp.o.requires
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/handle.cpp.o.provides.build
+.PHONY : CMakeFiles/main.dir/src/handle.cpp.o.provides
+
+CMakeFiles/main.dir/src/handle.cpp.o.provides.build: CMakeFiles/main.dir/src/handle.cpp.o
+
+
+CMakeFiles/main.dir/src/beam_element.cpp.o: CMakeFiles/main.dir/flags.make
+CMakeFiles/main.dir/src/beam_element.cpp.o: ../src/beam_element.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/thanos/Desktop/PhDDevelopment/MastersDissertation/FEM/needle_dynamics/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/main.dir/src/beam_element.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/main.dir/src/beam_element.cpp.o -c /home/thanos/Desktop/PhDDevelopment/MastersDissertation/FEM/needle_dynamics/src/beam_element.cpp
+
+CMakeFiles/main.dir/src/beam_element.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/main.dir/src/beam_element.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/thanos/Desktop/PhDDevelopment/MastersDissertation/FEM/needle_dynamics/src/beam_element.cpp > CMakeFiles/main.dir/src/beam_element.cpp.i
+
+CMakeFiles/main.dir/src/beam_element.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/main.dir/src/beam_element.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/thanos/Desktop/PhDDevelopment/MastersDissertation/FEM/needle_dynamics/src/beam_element.cpp -o CMakeFiles/main.dir/src/beam_element.cpp.s
+
+CMakeFiles/main.dir/src/beam_element.cpp.o.requires:
+
+.PHONY : CMakeFiles/main.dir/src/beam_element.cpp.o.requires
+
+CMakeFiles/main.dir/src/beam_element.cpp.o.provides: CMakeFiles/main.dir/src/beam_element.cpp.o.requires
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/beam_element.cpp.o.provides.build
+.PHONY : CMakeFiles/main.dir/src/beam_element.cpp.o.provides
+
+CMakeFiles/main.dir/src/beam_element.cpp.o.provides.build: CMakeFiles/main.dir/src/beam_element.cpp.o
+
+
+CMakeFiles/main.dir/src/flexible_beam_fem.cpp.o: CMakeFiles/main.dir/flags.make
+CMakeFiles/main.dir/src/flexible_beam_fem.cpp.o: ../src/flexible_beam_fem.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/thanos/Desktop/PhDDevelopment/MastersDissertation/FEM/needle_dynamics/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/main.dir/src/flexible_beam_fem.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/main.dir/src/flexible_beam_fem.cpp.o -c /home/thanos/Desktop/PhDDevelopment/MastersDissertation/FEM/needle_dynamics/src/flexible_beam_fem.cpp
+
+CMakeFiles/main.dir/src/flexible_beam_fem.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/main.dir/src/flexible_beam_fem.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/thanos/Desktop/PhDDevelopment/MastersDissertation/FEM/needle_dynamics/src/flexible_beam_fem.cpp > CMakeFiles/main.dir/src/flexible_beam_fem.cpp.i
+
+CMakeFiles/main.dir/src/flexible_beam_fem.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/main.dir/src/flexible_beam_fem.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/thanos/Desktop/PhDDevelopment/MastersDissertation/FEM/needle_dynamics/src/flexible_beam_fem.cpp -o CMakeFiles/main.dir/src/flexible_beam_fem.cpp.s
+
+CMakeFiles/main.dir/src/flexible_beam_fem.cpp.o.requires:
+
+.PHONY : CMakeFiles/main.dir/src/flexible_beam_fem.cpp.o.requires
+
+CMakeFiles/main.dir/src/flexible_beam_fem.cpp.o.provides: CMakeFiles/main.dir/src/flexible_beam_fem.cpp.o.requires
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/flexible_beam_fem.cpp.o.provides.build
+.PHONY : CMakeFiles/main.dir/src/flexible_beam_fem.cpp.o.provides
+
+CMakeFiles/main.dir/src/flexible_beam_fem.cpp.o.provides.build: CMakeFiles/main.dir/src/flexible_beam_fem.cpp.o
+
+
+CMakeFiles/main.dir/src/system_fem.cpp.o: CMakeFiles/main.dir/flags.make
+CMakeFiles/main.dir/src/system_fem.cpp.o: ../src/system_fem.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/thanos/Desktop/PhDDevelopment/MastersDissertation/FEM/needle_dynamics/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/main.dir/src/system_fem.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/main.dir/src/system_fem.cpp.o -c /home/thanos/Desktop/PhDDevelopment/MastersDissertation/FEM/needle_dynamics/src/system_fem.cpp
+
+CMakeFiles/main.dir/src/system_fem.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/main.dir/src/system_fem.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/thanos/Desktop/PhDDevelopment/MastersDissertation/FEM/needle_dynamics/src/system_fem.cpp > CMakeFiles/main.dir/src/system_fem.cpp.i
+
+CMakeFiles/main.dir/src/system_fem.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/main.dir/src/system_fem.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/thanos/Desktop/PhDDevelopment/MastersDissertation/FEM/needle_dynamics/src/system_fem.cpp -o CMakeFiles/main.dir/src/system_fem.cpp.s
+
+CMakeFiles/main.dir/src/system_fem.cpp.o.requires:
+
+.PHONY : CMakeFiles/main.dir/src/system_fem.cpp.o.requires
+
+CMakeFiles/main.dir/src/system_fem.cpp.o.provides: CMakeFiles/main.dir/src/system_fem.cpp.o.requires
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/system_fem.cpp.o.provides.build
+.PHONY : CMakeFiles/main.dir/src/system_fem.cpp.o.provides
+
+CMakeFiles/main.dir/src/system_fem.cpp.o.provides.build: CMakeFiles/main.dir/src/system_fem.cpp.o
+
+
 # Object files for target main
 main_OBJECTS = \
 "CMakeFiles/main.dir/main.cpp.o" \
 "CMakeFiles/main.dir/src/dynamics_math.cpp.o" \
-"CMakeFiles/main.dir/src/rigid_body.cpp.o" \
-"CMakeFiles/main.dir/src/flexible_beam_fem.cpp.o" \
-"CMakeFiles/main.dir/src/beam_element.cpp.o" \
 "CMakeFiles/main.dir/src/euler_rotations.cpp.o" \
-"CMakeFiles/main.dir/src/system_fem.cpp.o" \
-"CMakeFiles/main.dir/src/input_trajectory.cpp.o"
+"CMakeFiles/main.dir/src/input_trajectory.cpp.o" \
+"CMakeFiles/main.dir/src/handle.cpp.o" \
+"CMakeFiles/main.dir/src/beam_element.cpp.o" \
+"CMakeFiles/main.dir/src/flexible_beam_fem.cpp.o" \
+"CMakeFiles/main.dir/src/system_fem.cpp.o"
 
 # External object files for target main
 main_EXTERNAL_OBJECTS =
 
 main: CMakeFiles/main.dir/main.cpp.o
 main: CMakeFiles/main.dir/src/dynamics_math.cpp.o
-main: CMakeFiles/main.dir/src/rigid_body.cpp.o
-main: CMakeFiles/main.dir/src/flexible_beam_fem.cpp.o
-main: CMakeFiles/main.dir/src/beam_element.cpp.o
 main: CMakeFiles/main.dir/src/euler_rotations.cpp.o
-main: CMakeFiles/main.dir/src/system_fem.cpp.o
 main: CMakeFiles/main.dir/src/input_trajectory.cpp.o
+main: CMakeFiles/main.dir/src/handle.cpp.o
+main: CMakeFiles/main.dir/src/beam_element.cpp.o
+main: CMakeFiles/main.dir/src/flexible_beam_fem.cpp.o
+main: CMakeFiles/main.dir/src/system_fem.cpp.o
 main: CMakeFiles/main.dir/build.make
 main: /usr/lib/x86_64-linux-gnu/libarmadillo.so
 main: /usr/lib/x86_64-linux-gnu/libboost_filesystem.so
@@ -288,12 +288,12 @@ CMakeFiles/main.dir/build: main
 
 CMakeFiles/main.dir/requires: CMakeFiles/main.dir/main.cpp.o.requires
 CMakeFiles/main.dir/requires: CMakeFiles/main.dir/src/dynamics_math.cpp.o.requires
-CMakeFiles/main.dir/requires: CMakeFiles/main.dir/src/rigid_body.cpp.o.requires
-CMakeFiles/main.dir/requires: CMakeFiles/main.dir/src/flexible_beam_fem.cpp.o.requires
-CMakeFiles/main.dir/requires: CMakeFiles/main.dir/src/beam_element.cpp.o.requires
 CMakeFiles/main.dir/requires: CMakeFiles/main.dir/src/euler_rotations.cpp.o.requires
-CMakeFiles/main.dir/requires: CMakeFiles/main.dir/src/system_fem.cpp.o.requires
 CMakeFiles/main.dir/requires: CMakeFiles/main.dir/src/input_trajectory.cpp.o.requires
+CMakeFiles/main.dir/requires: CMakeFiles/main.dir/src/handle.cpp.o.requires
+CMakeFiles/main.dir/requires: CMakeFiles/main.dir/src/beam_element.cpp.o.requires
+CMakeFiles/main.dir/requires: CMakeFiles/main.dir/src/flexible_beam_fem.cpp.o.requires
+CMakeFiles/main.dir/requires: CMakeFiles/main.dir/src/system_fem.cpp.o.requires
 
 .PHONY : CMakeFiles/main.dir/requires
 

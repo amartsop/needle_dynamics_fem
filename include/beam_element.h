@@ -3,14 +3,17 @@
 #include <iostream>
 #include <armadillo>
 #include "dynamics_math.h"
-#include "state.h"
 
 class BeamElement
 {
 public:
     // Constructor
-    BeamElement(uint element_id, uint elements, double length, double radius, 
-        double young_modulus, double density);
+    BeamElement(uint element_id, arma::ivec boundary_conditions,
+        uint elements, double length, double radius, double young_modulus,
+        double density);
+
+    // Update element state, mass matrix and coriolis vector
+    void update(double t, arma::dvec q, arma::dvec q_dot);
 
     // Mass matrix getter
     arma::dmat get_mass_matrix(void){ return m_mass; }
@@ -27,15 +30,9 @@ public:
     // Get the element id
     uint get_element_id(void) { return m_element_id; }
 
-    // Set element id 
-    void set_element_id(uint element_id); 
-
     // Get number of dofs 
-    uint get_dofs_number(void) { return m_dofs; }
+    uint get_dofs_number(void) { return m_total_dofs; }
 
-    // Update element state, mass matrix and coriolis vector
-    void update(double t, arma::dvec q, arma::dvec q_dot);
-    
     // External forces 
     void calculate_external_forces(arma::dvec int1, arma::dvec int2, 
         arma::dvec int3, arma::dvec fbj_f);
@@ -78,7 +75,10 @@ private:
     // Inertial tensor of element j wrt to point A (reference frame) (kg * m^2)
     arma::dmat m_i_a_fj;
 
-    // Number of dofs
+    // Number of total dofs
+    uint m_total_dofs;
+
+    // Number of dofs after boundaries
     uint m_dofs;
 
     // Mass (kg)
@@ -143,6 +143,12 @@ private:
     // Locator matrix for global transformation
     arma::dmat m_lj_mat;
 
+    // Boundary conditions vector
+    arma::ivec m_lb;
+
+    // Boundary conditions matrix 
+    arma::dmat m_lb_mat;
+
 private:
     // Element mass matrix 
     arma::dmat m_mass;
@@ -158,6 +164,9 @@ private:
 
 private:
 
+    // State update 
+    void state_update(arma::dvec q, arma::dvec q_dot);
+
     // Mass matrix calculation
     void mass_matrix_calculation(void); 
 
@@ -172,6 +181,20 @@ private:
 
     // Shape integrals calculation
     void shape_integrals(void);
+
+public:
+    arma::dmat get_mfj33_matrix(void){ return m_mfj33; }
+    arma::dmat get_kfj33_matrix(void){ return m_kfj33; }
+
+private:
+    // Mass and stiffness matrix elastic components 
+    arma::dmat m_mfj33, m_kfj33;
+
+    // Elastic mass matrix calculation (constant)
+    void elastic_mass_matrix_calculation(void);
+
+    // Elastic stiffness matrix calculation
+    void elastic_stiffness_matrix_calculation(void);
 
 public:
     // Shape function calculation

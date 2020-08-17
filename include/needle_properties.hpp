@@ -3,6 +3,10 @@
 class NeedleProperties
 {
 public:
+    // Gravity constant (m / s^2)
+    const double m_grav = 9.80665 ;
+
+public:
     // Handle geometry
     static double get_handle_radius(void) { return m_handle_radius; }
     static double get_handle_length(void) { return m_handle_length; }

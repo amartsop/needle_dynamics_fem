@@ -3,24 +3,17 @@
 
 CMakeFiles/main.dir/main.cpp.o: .././include/beam_element.h
 CMakeFiles/main.dir/main.cpp.o: .././include/dynamics_math.h
-CMakeFiles/main.dir/main.cpp.o: .././include/euler_rotations.h
 CMakeFiles/main.dir/main.cpp.o: .././include/flexible_beam_fem.h
 CMakeFiles/main.dir/main.cpp.o: .././include/gnuplot-iostream.h
+CMakeFiles/main.dir/main.cpp.o: .././include/handle.h
 CMakeFiles/main.dir/main.cpp.o: .././include/input_trajectory.h
-CMakeFiles/main.dir/main.cpp.o: .././include/needle_animation.hpp
 CMakeFiles/main.dir/main.cpp.o: .././include/needle_properties.hpp
-CMakeFiles/main.dir/main.cpp.o: .././include/numerical_integration.hpp
-CMakeFiles/main.dir/main.cpp.o: .././include/post_processing_fem.hpp
-CMakeFiles/main.dir/main.cpp.o: .././include/rigid_body.h
-CMakeFiles/main.dir/main.cpp.o: .././include/state.h
 CMakeFiles/main.dir/main.cpp.o: .././include/system_fem.h
-CMakeFiles/main.dir/main.cpp.o: ../include/gnuplot-iostream.h
 CMakeFiles/main.dir/main.cpp.o: ../main.cpp
 
 CMakeFiles/main.dir/src/beam_element.cpp.o: .././include/beam_element.h
 CMakeFiles/main.dir/src/beam_element.cpp.o: .././include/dynamics_math.h
 CMakeFiles/main.dir/src/beam_element.cpp.o: .././include/euler_rotations.h
-CMakeFiles/main.dir/src/beam_element.cpp.o: .././include/state.h
 CMakeFiles/main.dir/src/beam_element.cpp.o: ../src/beam_element.cpp
 
 CMakeFiles/main.dir/src/dynamics_math.cpp.o: .././include/dynamics_math.h
@@ -33,26 +26,23 @@ CMakeFiles/main.dir/src/flexible_beam_fem.cpp.o: .././include/beam_element.h
 CMakeFiles/main.dir/src/flexible_beam_fem.cpp.o: .././include/dynamics_math.h
 CMakeFiles/main.dir/src/flexible_beam_fem.cpp.o: .././include/flexible_beam_fem.h
 CMakeFiles/main.dir/src/flexible_beam_fem.cpp.o: .././include/needle_properties.hpp
-CMakeFiles/main.dir/src/flexible_beam_fem.cpp.o: .././include/state.h
 CMakeFiles/main.dir/src/flexible_beam_fem.cpp.o: ../src/flexible_beam_fem.cpp
+
+CMakeFiles/main.dir/src/handle.cpp.o: .././include/dynamics_math.h
+CMakeFiles/main.dir/src/handle.cpp.o: .././include/euler_rotations.h
+CMakeFiles/main.dir/src/handle.cpp.o: .././include/handle.h
+CMakeFiles/main.dir/src/handle.cpp.o: .././include/needle_properties.hpp
+CMakeFiles/main.dir/src/handle.cpp.o: ../src/handle.cpp
 
 CMakeFiles/main.dir/src/input_trajectory.cpp.o: .././include/input_trajectory.h
 CMakeFiles/main.dir/src/input_trajectory.cpp.o: ../src/input_trajectory.cpp
 
-CMakeFiles/main.dir/src/rigid_body.cpp.o: .././include/dynamics_math.h
-CMakeFiles/main.dir/src/rigid_body.cpp.o: .././include/euler_rotations.h
-CMakeFiles/main.dir/src/rigid_body.cpp.o: .././include/needle_properties.hpp
-CMakeFiles/main.dir/src/rigid_body.cpp.o: .././include/rigid_body.h
-CMakeFiles/main.dir/src/rigid_body.cpp.o: .././include/state.h
-CMakeFiles/main.dir/src/rigid_body.cpp.o: ../src/rigid_body.cpp
-
 CMakeFiles/main.dir/src/system_fem.cpp.o: .././include/beam_element.h
 CMakeFiles/main.dir/src/system_fem.cpp.o: .././include/dynamics_math.h
 CMakeFiles/main.dir/src/system_fem.cpp.o: .././include/flexible_beam_fem.h
+CMakeFiles/main.dir/src/system_fem.cpp.o: .././include/handle.h
 CMakeFiles/main.dir/src/system_fem.cpp.o: .././include/input_trajectory.h
 CMakeFiles/main.dir/src/system_fem.cpp.o: .././include/needle_properties.hpp
-CMakeFiles/main.dir/src/system_fem.cpp.o: .././include/rigid_body.h
-CMakeFiles/main.dir/src/system_fem.cpp.o: .././include/state.h
 CMakeFiles/main.dir/src/system_fem.cpp.o: .././include/system_fem.h
 CMakeFiles/main.dir/src/system_fem.cpp.o: ../src/system_fem.cpp
 

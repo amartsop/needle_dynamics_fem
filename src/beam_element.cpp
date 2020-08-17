@@ -1,8 +1,9 @@
 #include "beam_element.h"
 #include "euler_rotations.h"
 
-BeamElement::BeamElement(uint element_id, uint elements, double length, double radius, 
-        double young_modulus, double density)
+BeamElement::BeamElement(uint element_id, arma::ivec boundary_conditions,
+    uint elements, double length, double radius, double young_modulus,
+    double density)
 {
     // Element id
     m_element_id = element_id;
@@ -25,9 +26,6 @@ BeamElement::BeamElement(uint element_id, uint elements, double length, double r
     // Element weight vector 
     m_weight_F = {0.0, 0.0, - m_g * m_mfj};
 
-    // Number of dofs 
-    m_dofs = 5 * (m_elements + 1);
-
     // Cross-sectional area
     m_area = M_PI * pow(m_radius, 2.0);
 
@@ -49,11 +47,25 @@ BeamElement::BeamElement(uint element_id, uint elements, double length, double r
         {0.0, 0.0, m_mfj * (pow(m_length, 2.0) +
         3.0 * pow(m_radius, 2.0)) / 12.0}};
 
+
+    // Number of dofs 
+    m_total_dofs = 5 * (m_elements + 1);
+
+    // Boundary conditions vector
+    m_lb = boundary_conditions;
+
+    // Number of dofs after bounderies
+    m_dofs = m_total_dofs - m_lb.n_rows;
+
+    // Boundary conditions matrix
+    m_lb_mat = arma::zeros(m_total_dofs, m_dofs);
+    arma::ivec lb_inv = arma::regspace<arma::ivec>(m_lb.back() + 1, m_total_dofs);
+    for(uint i = 0; i < lb_inv.n_rows; i++) { m_lb_mat(lb_inv(i) - 1, i) = 1.0; }
+
     // Locator vectors for global transformation 
     arma::ivec lj_vec = arma::regspace<arma::ivec>(5 * m_element_id - 4, 1, 
         5 * m_element_id + 5);
-
-    m_lj_mat = dm::locator_matrix(lj_vec, m_dofs);
+    m_lj_mat = dm::locator_matrix(lj_vec, m_total_dofs);
 
     // Locator matrices for local transformation(axial and bending elements)
     m_luj_mat = dm::locator_matrix(m_luj, m_ns);
@@ -63,20 +75,42 @@ BeamElement::BeamElement(uint element_id, uint elements, double length, double r
     // Caclualate shape integrals
     shape_integrals();
 
+    //Elastic mass matrix
+    elastic_mass_matrix_calculation();
+
+    //Elastic stiffness matrix 
+    elastic_stiffness_matrix_calculation();
+
+    // Calculate stiffness matrix (constant)
+    stiffness_matrix_calculation();
+
     // Calculate stiffness matrix (constant)
     stiffness_matrix_calculation();
 }
 
+
+// Update state 
+void BeamElement::state_update(arma::dvec q, arma::dvec q_dot)
+{
+    // State
+    m_roa_g_g = {q(0), q(1), q(2)};
+    m_theta = {q(3), q(4), q(5)};
+    m_qf = q(arma::span(6, q.n_rows - 1));
+
+    // State dot
+    m_roa_dot_g_g = {q_dot(0), q_dot(1), q_dot(2)};
+    m_theta_dot = {q_dot(3), q_dot(4), q_dot(5)};
+    m_qf_dot = q_dot(arma::span(6, q.n_rows - 1));
+}
+
+
 // Update element state, mass matrix and coriolis vector
 void BeamElement::update(double t, arma::dvec q, arma::dvec q_dot) 
 {
-    // State
-    m_theta = state::theta(q, q_dot);
-    m_theta_dot = state::theta_dot(q, q_dot);
-    m_qf = state::qf(q, q_dot);
-    m_qf_dot = state::qf_dot(q, q_dot);
+    // State update 
+    state_update(q, q_dot);
 
-    // Time 
+    // Time update
     m_time = t;
 
     // G and Gdot matrices
@@ -99,6 +133,8 @@ void BeamElement::update(double t, arma::dvec q, arma::dvec q_dot)
     coriolis_vector_calculation();
 }
 
+
+// Mass matrix calculation
 void BeamElement::mass_matrix_calculation(void)
 {
     // First row   
@@ -121,23 +157,94 @@ void BeamElement::mass_matrix_calculation(void)
     arma::dmat mfj2 = arma::join_horiz(mfj21, mfj22, mfj23);
 
     // Third row   
-    arma::dmat mfj31 = mfj13.t();
+    arma::dmat mfj31= mfj13.t();
 
     arma::dmat mfj32 = mfj23.t();
 
-    arma::dmat mfj33 = m_nj_int[6];
-
-    arma::dmat mfj3 = arma::join_horiz(mfj31, mfj32, mfj33);
+    arma::dmat mfj3 = arma::join_horiz(mfj31, mfj32, m_mfj33);
 
     // Mass matrix
     m_mass = arma::join_vert(mfj1, mfj2, mfj3);
 }
 
 
-
+// Stiffness matrix calculation
 void BeamElement::stiffness_matrix_calculation(void)
 {
+    // First row 
+    arma::dmat kfj11 = arma::zeros(3, 3); arma::dmat kfj12 = arma::zeros(3, 3);
+    arma::dmat kfj13 = arma::zeros(3, m_dofs);
+    arma::dmat kfj1 = arma::join_horiz(kfj11, kfj12, kfj13);
 
+    // Second row 
+    arma::dmat kfj21 = arma::zeros(3, 3); arma::dmat kfj22 = arma::zeros(3, 3);
+    arma::dmat kfj23 = arma::zeros(3, m_dofs);
+    arma::dmat kfj2 = arma::join_horiz(kfj21, kfj22, kfj23);
+
+    // Third row 
+    arma::dmat kfj31 = arma::zeros(m_dofs, 3);
+    arma::dmat kfj32 = arma::zeros(m_dofs, 3);
+    arma::dmat kfj3 = arma::join_horiz(kfj31, kfj32, m_kfj33);
+
+    // Total stiffness matrix 
+    m_stiffness = arma::join_vert(kfj1, kfj2, kfj3);
+}
+
+
+// Coriolis-centrifugal vector calculation
+void BeamElement::coriolis_vector_calculation(void)
+{
+    // First vector
+    arma::dvec fvfj1 = m_rot_f_F * ((m_mfj * dm::s(m_racoj_f_f) +
+        dm::s(m_nj_int[0] * m_qf)) * m_g_dot_mat * m_theta_dot -
+        pow(dm::s(m_omega), 2.0) * (m_racoj_f_f * m_mfj +
+        m_nj_int[0] * m_qf) - 2.0 * dm::s(m_omega) * m_nj_int[0] * m_qf_dot);
+    
+    // Second vector
+    arma::dvec fvfj2 = m_g_mat.t() * (m_nj_int[7] +
+        2.0 * (m_nj_int[8] + m_nj_int[9]) * m_qf_dot -
+        m_i_a_fj * m_g_dot_mat * m_theta_dot);
+
+    // Third vector
+    arma::dvec fvfj3 = (m_nj_int[4] + m_nj_int[5]).t() *
+        m_g_dot_mat * m_theta_dot - m_nj_int[10] - 2.0 * m_nj_int[11] * m_qf_dot;
+
+    // Coriolis-Centrifugal vector
+    m_fvfj = arma::join_vert(fvfj1, fvfj2, fvfj3);
+}
+
+
+// External force calculation
+void BeamElement::calculate_external_forces(arma::dvec int1, arma::dvec int2, 
+    arma::dvec int3, arma::dvec fbj_f)
+{
+    // First term
+    arma::dvec qfj1 = m_rot_f_F * int1 + m_rot_f_F * fbj_f + 
+        m_weight_F;
+
+    // Second term
+    arma::dvec qfj2 = m_g_mat.t() * (int2 + dj_x(m_length) * fbj_f + 
+        dj_x(m_length / 2.0) * m_rot_f_F.t() * m_weight_F);
+
+    // Third term
+    arma::dvec qfj3 = int3 + shape_function(m_length).t() * fbj_f + 
+        shape_function(m_length / 2.0).t() * m_rot_f_F.t() * m_weight_F;
+    
+    // Force vector 
+    m_qfj = arma::join_vert(qfj1, qfj2, qfj3);
+}
+
+
+// Elastic mass matrix
+void BeamElement::elastic_mass_matrix_calculation(void)
+{
+    m_mfj33 = m_phi11j_dash + m_phi22j_dash + m_phi33j_dash;
+}
+
+
+// Elastic stiffness matrix calculation
+void BeamElement::elastic_stiffness_matrix_calculation(void)
+{
     // Element area moment of inertia (m^4)
     double m_iyy = (M_PI / 4) * pow(m_radius, 4.0);
     double m_izz = (M_PI / 4) * pow(m_radius, 4.0);
@@ -170,59 +277,9 @@ void BeamElement::stiffness_matrix_calculation(void)
     arma::dmat kej = m_luj_mat.t() * ku * m_luj_mat + m_lvj_mat.t() * kv * m_lvj_mat + 
         m_lwj_mat.t() * kw * m_lwj_mat;
 
-    // First row
-    arma::dmat kfj1 = arma::join_horiz(arma::zeros(3, 3), arma::zeros(3, 3), 
-        arma::zeros(3, m_dofs));
-
-    // Third rows 
-    arma::dmat kfj3 = arma::join_horiz(arma::zeros(m_dofs, 3),
-        arma::zeros(m_dofs, 3), m_lj_mat.t() * kej * m_lj_mat);
-
-    // Total stiffness matrix 
-    m_stiffness = arma::join_vert(kfj1, kfj1, kfj3);
+    m_kfj33 = m_lb_mat.t() * m_lj_mat.t() * kej * m_lj_mat * m_lb_mat;
 }
 
-
-void BeamElement::coriolis_vector_calculation(void)
-{
-    // First vector
-    arma::dvec fvfj1 = m_rot_f_F * ((m_mfj * dm::s(m_racoj_f_f) +
-        dm::s(m_nj_int[0] * m_qf)) * m_g_dot_mat * m_theta_dot -
-        pow(dm::s(m_omega), 2.0) * (m_racoj_f_f * m_mfj +
-        m_nj_int[0] * m_qf) - 2.0 * dm::s(m_omega) * m_nj_int[0] * m_qf_dot);
-    
-    // Second vector
-    arma::dvec fvfj2 = m_g_mat.t() * (m_nj_int[7] +
-        2.0 * (m_nj_int[8] + m_nj_int[9]) * m_qf_dot -
-        m_i_a_fj * m_g_dot_mat * m_theta_dot);
-
-    // Third vector
-    arma::dvec fvfj3 = (m_nj_int[4] + m_nj_int[5]).t() *
-        m_g_dot_mat * m_theta_dot - m_nj_int[10] - 2.0 * m_nj_int[11] * m_qf_dot;
-
-    // Coriolis-Centrifugal vector
-    m_fvfj = arma::join_vert(fvfj1, fvfj2, fvfj3);
-}
-
-void BeamElement::calculate_external_forces(arma::dvec int1, arma::dvec int2, 
-    arma::dvec int3, arma::dvec fbj_f)
-{
-
-    // First term
-    arma::dvec qfj1 = m_rot_f_F * int1 + m_rot_f_F * fbj_f + 
-        m_weight_F;
-
-    // Second term
-    arma::dvec qfj2 = m_g_mat.t() * (int2 + dj_x(m_length) * fbj_f + 
-        dj_x(m_length / 2.0) * m_rot_f_F.t() * m_weight_F);
-
-    // Third term
-    arma::dvec qfj3 = int3 + shape_function(m_length).t() * fbj_f + 
-        shape_function(m_length / 2.0).t() * m_rot_f_F.t() * m_weight_F;
-    
-    // Force vector 
-    m_qfj = arma::join_vert(qfj1, qfj2, qfj3);
-}
 
 // Nj integrals calculation
 void BeamElement::nj_integrals(void)
@@ -239,8 +296,9 @@ void BeamElement::nj_integrals(void)
         m_length / 12.0};
     psi_wj_int *= m_mfj;
     
-    m_nj_int[0] = arma::join_vert(psi_uj_int * m_luj_mat * m_lj_mat,
-        psi_vj_int * m_lvj_mat * m_lj_mat, psi_wj_int * m_lwj_mat * m_lj_mat);
+    m_nj_int[0] = arma::join_vert(psi_uj_int * m_luj_mat * m_lj_mat * m_lb_mat,
+        psi_vj_int * m_lvj_mat * m_lj_mat * m_lb_mat,
+        psi_wj_int * m_lwj_mat * m_lj_mat * m_lb_mat);
 
     /*************** Integral N2j ***************/
     m_nj_int[1] = m_i_coj_f + m_mfj * dm::s(m_racoj_f_f).t() *
@@ -353,24 +411,24 @@ void BeamElement::shape_integrals(void)
     //Integral phi11j_dash
     arma::dmat phi_uuj = {{1.0 / 3.0, 1.0 / 6.0}, {1.0 / 6.0, 1.0 / 3.0}};
 
-    m_phi11j_dash = m_mfj * m_lj_mat.t() * m_luj_mat.t() * phi_uuj * m_luj_mat *
-        m_lj_mat;
+    m_phi11j_dash = m_mfj * m_lb_mat.t() * m_lj_mat.t() * m_luj_mat.t() *
+        phi_uuj * m_luj_mat * m_lj_mat * m_lb_mat;
 
     //Integral phi12j_dash
     arma::dmat phi_uvj = {{7.0 / 20.0, m_length / 20.0, 3.0 / 20.0,
         - m_length / 30.0}, {3.0 / 20.0, m_length / 30.0, 7.0 / 20.0,
         - m_length / 20.0}};
 
-    m_phi12j_dash = m_mfj * m_lj_mat.t() * m_luj_mat.t() * phi_uvj * m_lvj_mat *
-        m_lj_mat;
+    m_phi12j_dash = m_mfj * m_lb_mat.t() * m_lj_mat.t() * m_luj_mat.t() *
+        phi_uvj * m_lvj_mat * m_lj_mat * m_lb_mat;
 
     //Integral phi13j_dash
     arma::dmat phi_uwj = {{7.0 / 20.0, - m_length / 20.0, 3.0 / 20.0,
         m_length / 30.0}, {3.0 / 20.0, - m_length / 30.0, 7.0 / 20.0,
         m_length / 20.0}};
 
-    m_phi13j_dash = m_mfj * m_lj_mat.t() * m_luj_mat.t() * phi_uwj * m_lwj_mat *
-        m_lj_mat;
+    m_phi13j_dash = m_mfj * m_lb_mat.t() * m_lj_mat.t() * m_luj_mat.t() *
+        phi_uwj * m_lwj_mat * m_lj_mat * m_lb_mat;
 
     //Integral phi21j_dash
     m_phi21j_dash = m_phi12j_dash.t();
@@ -383,8 +441,8 @@ void BeamElement::shape_integrals(void)
         {- 13.0 * m_length, - 3.0 * pow(m_length, 2.0), 
         - 22.0 * m_length, 4.0 * pow(m_length, 2.0)}};
 
-    m_phi22j_dash = (m_mfj / 420.0) * m_lj_mat.t() * m_lvj_mat.t() * phi_vvj * 
-        m_lvj_mat * m_lj_mat;
+    m_phi22j_dash = (m_mfj / 420.0) * m_lb_mat.t() * m_lj_mat.t() *
+        m_lvj_mat.t() * phi_vvj * m_lvj_mat * m_lj_mat * m_lb_mat;
 
     //Integral phi23j_dash
     arma::dmat phi_vwj = {{156.0, - 22.0 * m_length, 54.0, 13.0 * m_length}, 
@@ -394,8 +452,8 @@ void BeamElement::shape_integrals(void)
         {- 13.0 * m_length, 3.0 * pow(m_length, 2.0), 
         - 22.0 * m_length, - 4.0 * pow(m_length, 2.0)}}; 
 
-    m_phi23j_dash = (m_mfj / 420.0) * m_lj_mat.t() * m_lvj_mat.t() * phi_vwj * 
-        m_lwj_mat * m_lj_mat;
+    m_phi23j_dash = (m_mfj / 420.0) * m_lb_mat.t() * m_lj_mat.t() *
+        m_lvj_mat.t() * phi_vwj * m_lwj_mat * m_lj_mat * m_lb_mat;
 
     //Integral phi31j_dash
     m_phi31j_dash = m_phi13j_dash.t();
@@ -411,50 +469,51 @@ void BeamElement::shape_integrals(void)
         {13.0 * m_length, - 3.0 * pow(m_length, 2.0), 
         22.0 * m_length, 4.0 * pow(m_length, 2.0)}};
 
-    m_phi33j_dash = (m_mfj / 420.0) * m_lj_mat.t() * m_lwj_mat.t() *
-        phi_wwj * m_lwj_mat * m_lj_mat;
+    m_phi33j_dash = (m_mfj / 420.0) * m_lb_mat.t() * m_lj_mat.t() * m_lwj_mat.t() *
+        phi_wwj * m_lwj_mat * m_lj_mat * m_lb_mat;
 
     /********* Shape integrals hat *********/
     //Integral phi11j_hat
     arma::drowvec phi_x1uj = {1.0 / 6.0, 1.0 / 3.0};
-    m_phi11j_hat  = m_mfj * m_length * phi_x1uj * m_luj_mat * m_lj_mat;                          
+    m_phi11j_hat  = m_mfj * m_length * phi_x1uj * m_luj_mat * m_lj_mat * m_lb_mat;                          
 
     //Integral phi12j_hat
     arma::drowvec phi_x1vj = {3.0 / 20.0, m_length / 30.0, 7.0 / 20.0, 
         - m_length / 20.0};
-    m_phi12j_hat  = m_mfj * m_length * phi_x1vj * m_lvj_mat * m_lj_mat;                          
+    m_phi12j_hat  = m_mfj * m_length * phi_x1vj * m_lvj_mat * m_lj_mat * m_lb_mat;                          
 
     //Integral phi13j_hat
     arma::drowvec phi_x1wj = {3.0 / 20.0, - m_length / 30.0, 7.0 / 20.0, 
         m_length / 20.0};
-    m_phi13j_hat  = m_mfj * m_length * phi_x1wj * m_lwj_mat * m_lj_mat;                          
+    m_phi13j_hat  = m_mfj * m_length * phi_x1wj * m_lwj_mat * m_lj_mat * m_lb_mat;                          
 
     //Integral phi21j_hat
     arma::drowvec phi_x2uj = arma::zeros<arma::drowvec>(1, m_axial_dofs);
-    m_phi21j_hat = phi_x2uj * m_luj_mat * m_lj_mat;
+    m_phi21j_hat = phi_x2uj * m_luj_mat * m_lj_mat * m_lb_mat;
 
     //Integral phi22j_hat
     arma::drowvec phi_x2vj = arma::zeros<arma::drowvec>(1, m_bending_y_dofs);
-    m_phi22j_hat = phi_x2vj * m_lvj_mat * m_lj_mat;
+    m_phi22j_hat = phi_x2vj * m_lvj_mat * m_lj_mat * m_lb_mat;
 
     //Integral phi23j_hat
     arma::drowvec phi_x2wj = arma::zeros<arma::drowvec>(1, m_bending_z_dofs);
-    m_phi23j_hat = phi_x2wj * m_lwj_mat * m_lj_mat;
+    m_phi23j_hat = phi_x2wj * m_lwj_mat * m_lj_mat * m_lb_mat;
 
     //Integral phi31j_hat
     arma::drowvec phi_x3uj = arma::zeros<arma::drowvec>(1, m_axial_dofs);
-    m_phi31j_hat = phi_x3uj * m_luj_mat * m_lj_mat;
+    m_phi31j_hat = phi_x3uj * m_luj_mat * m_lj_mat * m_lb_mat;
 
     //Integral phi32j_hat
     arma::drowvec phi_x3vj = arma::zeros<arma::drowvec>(1, m_bending_y_dofs);
-    m_phi32j_hat = phi_x3vj * m_lvj_mat * m_lj_mat;
+    m_phi32j_hat = phi_x3vj * m_lvj_mat * m_lj_mat * m_lb_mat;
 
     //Integral phi33j_hat
     arma::drowvec phi_x3wj = arma::zeros<arma::drowvec>(1, m_bending_z_dofs);
-    m_phi33j_hat = phi_x3wj * m_lwj_mat * m_lj_mat;
+    m_phi33j_hat = phi_x3wj * m_lwj_mat * m_lj_mat * m_lb_mat;
 }
 
 
+// Shape function 
 arma::dmat BeamElement::shape_function(double xj)
 {
     // Dimensionless lenght
@@ -476,9 +535,11 @@ arma::dmat BeamElement::shape_function(double xj)
         - m_length * (pow(ksi, 3.0) - pow(ksi, 2.0))};
 
     // Total shape function 
-    return arma::join_vert(psi_u * m_luj_mat * m_lj_mat,
-        psi_v * m_lvj_mat * m_lj_mat, psi_w * m_lwj_mat * m_lj_mat);
+    return arma::join_vert(psi_u * m_luj_mat * m_lj_mat * m_lb_mat,
+        psi_v * m_lvj_mat * m_lj_mat * m_lb_mat,
+        psi_w * m_lwj_mat * m_lj_mat * m_lb_mat);
 }
+
 
 // Dj(x) function
 arma::dmat BeamElement::dj_x(double xj)
@@ -492,6 +553,8 @@ arma::dmat BeamElement::dj_x(double xj)
     return dj_matrix;
 }
 
+
+// Get deflection with respect to f frame
 arma::dvec BeamElement::get_deflection(double xj, arma::dvec elastic_coordinates)
 {
     return shape_function(xj) * elastic_coordinates;
